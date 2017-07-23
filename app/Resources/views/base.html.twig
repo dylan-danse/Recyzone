@@ -12,8 +12,7 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-+ENW/yibaokMnme+vBLnHMphUYxHs34h9lpdbSLuAwGkOKFRl4C34WkjazBtb7eT" crossorigin="anonymous"></head>
 
 <body>
 
@@ -29,13 +28,36 @@
             <a class="navbar-brand" href="./">Recyzone</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
+
             <ul class="nav navbar-nav">
                 <li class="active"><a href="./">Home</a></li>
-                <li class="active"><a href="./test">Tests</a></li>
-                <li class="active"><a href="./createTest">Create Test</a></li>
+                <li><a href="./test">Tests</a></li>
+                <li><a href="./createTest">Create Test</a></li>
+
             </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li><p class="navbar-text">Welcome {{ app.user.username}} !</p></li>
+                        <li><a href="{{ path('fos_user_security_logout') }}">Log Out</a></li>
+                    {% else %}
+                        <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
+                        <li><a href="{{ path('fos_user_security_login') }}">Log In</a></li>
+                    {% endif %}
+
+            </ul>
+
+            </div>
+        </div>
+
+        <div class="pull-right">
+
+
         </div>
     </div>
+
+
 </nav>
 
 <div class="container">
