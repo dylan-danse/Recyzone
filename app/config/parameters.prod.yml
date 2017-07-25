@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 192.168.100.13
+    database_port: null
+    database_name: recyzone
+    database_user: in14b1037
+    database_password: 3083
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: no-reply@recyzone.eu
+    mailer_password: null
+    secret: ThisTokenIsNotSoSecretChangeIt
