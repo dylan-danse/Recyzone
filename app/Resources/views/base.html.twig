@@ -30,29 +30,28 @@
         <div id="navbar" class="collapse navbar-collapse">
 
             <ul class="nav navbar-nav">
+            <!--  TODO : replace this with the role check -->
+            {% if app.user == 'dylan' %}
                 <li class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}"><a href="./">Home</a></li>
                 <li class="{% if app.request.attributes.get('_route') == 'test' %}active{% endif %}"><a href="./test">Fetch Tests</a></li>
                 <li class="{% if app.request.attributes.get('_route') == 'createTest' %}active{% endif %}"><a href="./createTest">Create a Test</a></li>
+            {% else %}
+            {% endif %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
 
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                         <li><p class="navbar-text">Welcome {{ app.user.username}} !</p></li>
-                        <li><a href="{{ path('fos_user_security_logout') }}">Log Out</a></li>
+                        <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
                     {% else %}
                         <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
-                        <li><a href="{{ path('fos_user_security_login') }}">Log In</a></li>
+                        <li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
                     {% endif %}
 
             </ul>
 
             </div>
-        </div>
-
-        <div class="pull-right">
-
-
         </div>
     </div>
 
@@ -61,6 +60,7 @@
 
 <div class="container">
 
+    <p>{{ app.user }}</p>
     {% block body %}{% endblock %}
 
     {% block javascripts %}{% endblock %}

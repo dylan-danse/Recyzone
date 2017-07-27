@@ -3,8 +3,8 @@
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
     {{ form_row(form.email) }}
     {{ form_row(form.username) }}
-    {{ form_row(form.plainPassWord.first) }}
-    {{ form_row(form.plainPassWord.second) }}
+    {{ form_row(form.plainPassword.first) }}
+    {{ form_row(form.plainPassword.second) }}
     {{ form_row(form.firstName) }}
     {{ form_row(form.lastName) }}
     <div>
