@@ -31,7 +31,7 @@
 
             <ul class="nav navbar-nav">
             <!--  TODO : replace this with the role check -->
-            {% if app.user == 'dylan' %}
+            {% if app.user != null %}
                 <li class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}"><a href="./">Home</a></li>
                 <li class="{% if app.request.attributes.get('_route') == 'test' %}active{% endif %}"><a href="./test">Fetch Tests</a></li>
                 <li class="{% if app.request.attributes.get('_route') == 'createTest' %}active{% endif %}"><a href="./createTest">Create a Test</a></li>
@@ -42,7 +42,7 @@
             <ul class="nav navbar-nav navbar-right">
 
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                        <li><p class="navbar-text">Welcome {{ app.user.username}} !</p></li>
+                        <li><p class="navbar-text">Welcome {{ app.user.firstName }} {{ app.user.lastName}} !</p></li>
                         <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
                     {% else %}
                         <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
