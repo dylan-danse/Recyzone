@@ -54,6 +54,13 @@ class User extends BaseUser
      */
     private $lastName;
 
+    /**
+     * Many Users have One Role.
+     * @ORM\ManyToOne(targetEntity="Role")
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
+     */
+    private $role;
+
     public function __construct()
     {
         parent::__construct();
