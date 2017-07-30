@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,56 +13,56 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-+ENW/yibaokMnme+vBLnHMphUYxHs34h9lpdbSLuAwGkOKFRl4C34WkjazBtb7eT" crossorigin="anonymous"></head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+ENW/yibaokMnme+vBLnHMphUYxHs34h9lpdbSLuAwGkOKFRl4C34WkjazBtb7eT" crossorigin="anonymous">
+</head>
 
 <body>
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="./">Recyzone</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
 
-<nav class="navbar navbar-inverse">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="./">Recyzone</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-
-            <ul class="nav navbar-nav">
-            <!--  TODO : replace this with the role check -->
-            {% if app.user != null %}
-                <li class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}"><a href="./">Home</a></li>
-                <li class="{% if app.request.attributes.get('_route') == 'test' %}active{% endif %}"><a href="./test">Fetch Tests</a></li>
-                <li class="{% if app.request.attributes.get('_route') == 'createTest' %}active{% endif %}"><a href="./createTest">Create a Test</a></li>
-            {% else %}
-            {% endif %}
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-
-                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                        <li><p class="navbar-text">Welcome {{ app.user.firstName }} {{ app.user.lastName}} !</p></li>
-                        <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
-                    {% else %}
-                        <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
-                        <li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
-                    {% endif %}
-
-            </ul>
-
+                <ul class="nav navbar-nav">
+                <!--  TODO : replace this with the role check -->
+                {% if app.user != null %}
+                    <li class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}"><a href="./">Home</a></li>
+                    <li class="{% if app.request.attributes.get('_route') == 'test' %}active{% endif %}"><a href="./test">Fetch Tests</a></li>
+                    <li class="{% if app.request.attributes.get('_route') == 'createTest' %}active{% endif %}"><a href="./createTest">Create a Test</a></li>
+                {% else %}
+                {% endif %}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            <li><p class="navbar-text">{{ app.user.firstName }} {{ app.user.lastName}} - {{ 'now'|date('d - m -Y') }}</p></li>
+                            <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
+                        {% else %}
+                            <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
+                            <li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+                        {% endif %}
+                </ul>
+                </div>
             </div>
         </div>
+    </nav>
+
+    <div class="container">
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
     </div>
 
+    <footer class="footer">
+        <p>greetings from footer</p>
+    </footer>
 
-</nav>
+</body>
+</html>
 
-<div class="container">
-
-    {% block body %}{% endblock %}
-
-    {% block javascripts %}{% endblock %}
-
-</div>
