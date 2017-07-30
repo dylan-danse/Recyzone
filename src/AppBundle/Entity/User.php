@@ -114,4 +114,28 @@ class User extends BaseUser
     {
         return $this->lastName;
     }
+
+    /**
+     * Set role
+     *
+     * @param string $lastName
+     *
+     * @return User
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
 }

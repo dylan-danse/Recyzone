@@ -19,10 +19,14 @@ class DefaultController extends Controller
         else{
             switch ($this->getUser()->getRole()->getName()){
                 case "Employé" :
-                    die('employe redirection');
                     return $this->redirect('./employe');
+                case "Gérant" :
+                    return $this->redirect('./gerant');
+                case "Ménage" :
+                    return $this->redirect('./menage');
+                case "CEO" :
+                    return $this->redirect('./ceo');
                 default :
-                    die('no role found redirection');
                     return $this->redirect('./error');
             }
         }
