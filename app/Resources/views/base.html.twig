@@ -27,19 +27,27 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="./">Recyzone</a>
+                <a class="navbar-brand" href="/">Recyzone</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
 
                 <ul class="nav navbar-nav">
-                <!--  TODO : replace this with the role check -->
+
                 {% if app.user != null %}
-                    <li class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}"><a href="./">Home</a></li>
-                    <li class="{% if app.request.attributes.get('_route') == 'test' %}active{% endif %}"><a href="./test">Fetch Tests</a></li>
-                    <li class="{% if app.request.attributes.get('_route') == 'createTest' %}active{% endif %}"><a href="./createTest">Create a Test</a></li>
-                {% else %}
+                    {% if app.user.role.name == "Employé" %}
+                        <li class="{% if app.request.attributes.get('_route') == 'addHousehold' %}active{% endif %}"><a href="./addHousehold">Add Household</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'makeDeposit' %}active{% endif %}"><a href="./makeDeposit">Make Deposit</a></li>
+                    {% elseif app.user.role.name == "Gérant" %}
+
+                    {% elseif app.user.role.name == "Ménage" %}
+
+                    {% elseif app.user.role.name == "CEO" %}
+
+                    {% endif %}
                 {% endif %}
+
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
                         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                             <li><p class="navbar-text">{{ app.user.firstName }} {{ app.user.lastName}} - {{ 'now'|date('d - m -Y') }}</p></li>
@@ -58,11 +66,6 @@
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </div>
-
-    <footer class="footer">
-        <p>greetings from footer</p>
-    </footer>
-
 </body>
 </html>
 

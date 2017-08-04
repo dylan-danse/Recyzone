@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1>Encodage déchets</h1>
+
+
+
+
+<div class="row">
+    <form class="form-inline text-center">
+        <div class="form-group">
+            <label for="name">Nom</label>
+            <input type="text" class="form-control" id="name" placeholder="John Doe">
+        </div>
+        <button type="submit" class="btn btn-default">Rechercher</button>
+    </form>
+</div>
+
+<br>
+
+<div class="row">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.firstName }} {{  user.lastName }}</td>
+                    <td>adresse</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+    <!-- reject if hour is not ok
+
+    -->
+
+{% endblock %}
