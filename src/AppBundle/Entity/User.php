@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
  */
-class User extends BaseUser
+class User extends BaseUser implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -309,5 +309,18 @@ class User extends BaseUser
     public function getRole()
     {
         return $this->role;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+        return $vars;
     }
 }
