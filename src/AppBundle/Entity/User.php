@@ -27,12 +27,6 @@ class User extends BaseUser
      * @ORM\Column(name="firstName", type="string", length=255, nullable=true)
      *
      * @Assert\NotBlank(message="Please enter your first name.", groups={"Registration", "Profile"})
-     * @Assert\Length(
-     *     min=3,
-     *     max=255,
-     *     minMessage="The name is too short.",
-     *     maxMessage="The name is too long.",
-     *     groups={"Registration", "Profile"}
      * )
      *
      */
@@ -44,15 +38,65 @@ class User extends BaseUser
      * @ORM\Column(name="lastName", type="string", length=255, nullable=true)
      *
      * @Assert\NotBlank(message="Please enter your last name.", groups={"Registration", "Profile"})
-     * @Assert\Length(
-     *     min=3,
-     *     max=255,
-     *     minMessage="The name is too short.",
-     *     maxMessage="The name is too long.",
-     *     groups={"Registration", "Profile"}
      * )
      */
     private $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="streetName", type="string", length=255, nullable=true)
+     * )
+     */
+    private $streetName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="houseNumber", type="string", length=255, nullable=true)
+     * )
+     */
+    private $houseNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="houseBox", type="string", length=255, nullable=true)
+     * )
+     */
+    private $houseBox;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="commune", type="string", length=255, nullable=true)
+     * )
+     */
+    private $commune;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     * )
+     */
+    private $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numberOfChild", type="string", length=255, nullable=true)
+     * )
+     */
+    private $numberOfChild;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numberOfAdult", type="string", length=255, nullable=true)
+     * )
+     */
+    private $numberOfAdult;
 
     /**
      * Many Users have One Role.
@@ -113,6 +157,134 @@ class User extends BaseUser
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+    /**
+     * Set streetName
+     *
+     * @param string $streetName
+     *
+     * @return User
+     */
+    public function setStreetName($streetName)
+    {
+        $this->streetName = $streetName;
+
+        return $this;
+    }
+
+    /**
+     * Get streetName
+     *
+     * @return string
+     */
+    public function getStreetName()
+    {
+        return $this->streetName;
+    }
+
+    /**
+     * Set houseNumber
+     *
+     * @param string $houseNumber
+     *
+     * @return User
+     */
+    public function setHouseNumber($houseNumber)
+    {
+        $this->houseNumber = $houseNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get houseNumber
+     *
+     * @return string
+     */
+    public function getHouseNumber()
+    {
+        return $this->houseNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommune()
+    {
+        return $this->commune;
+    }
+
+    /**
+     * @param string $commune
+     */
+    public function setCommune($commune)
+    {
+        $this->commune = $commune;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHouseBox()
+    {
+        return $this->houseBox;
+    }
+
+    /**
+     * @param string $houseBox
+     */
+    public function setHouseBox($houseBox)
+    {
+        $this->houseBox = $houseBox;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumberOfChild()
+    {
+        return $this->numberOfChild;
+    }
+
+    /**
+     * @param string $numberOfChild
+     */
+    public function setNumberOfChild($numberOfChild)
+    {
+        $this->numberOfChild = $numberOfChild;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumberOfAdult()
+    {
+        return $this->numberOfAdult;
+    }
+
+    /**
+     * @param string $numberOfAdult
+     */
+    public function setNumberOfAdult($numberOfAdult)
+    {
+        $this->numberOfAdult = $numberOfAdult;
     }
 
     /**
