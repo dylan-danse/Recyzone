@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use function MongoDB\BSON\toJSON;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class EmployeController extends Controller
 {
@@ -21,6 +23,38 @@ class EmployeController extends Controller
      */
     public function indexAction(Request $request)
     {
+        /*$currentTime = date('H:i a');
+        $openingWeekMorning =         \DateTime::createFromFormat('H:i a', "");
+        $closingWeekMorning =         \DateTime::createFromFormat('H:i a', "");
+        $openingWeekAfternoon =       \DateTime::createFromFormat('H:i a', "1 pm");
+        $closingWeekAfternoon =       \DateTime::createFromFormat('H:i a', "4 pm");
+        $openingSaturdayMorning =     \DateTime::createFromFormat('H:i a', "");
+        $closingSaturdayMorning =     \DateTime::createFromFormat('H:i a', "");
+        $openingSaturdayAfternoon =   \DateTime::createFromFormat('H:i a', "1 pm");
+        $closingSaturdayAfternon =    \DateTime::createFromFormat('H:i a', "5 pm");
+        die("HERE : " + $openingWeekAfternoon);
+
+        switch (date('D')){
+            case 'Mon':
+                die ("PARK IS CLOSED BECAUSE IT IS MONDAY OR SUNDAY");
+                break;
+            case 'Sun':
+            case 'Tue':
+            case 'Wed':
+            case 'Thu':
+            case 'Fri':
+                if ($currentTime > $openingWeekAfternoon && $currentTime < $closingWeekAfternoon){
+                    die("ITS OK : " + $currentTime);
+                }
+                else{
+                    die($openingWeekAfternoon);
+                }
+                break;
+            case 'Sat':
+                die ("SAMEDI");
+                break;
+        }*/
+
         if ($this->getUser() == null){
             return $this->redirect('./login');
         }
@@ -28,9 +62,16 @@ class EmployeController extends Controller
             return $this->redirect('./error');
         }
         else{
-            return $this->render('employe/index.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-            ]);
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery("select n from AppBundle\Entity\Notification n inner join n.park as p where p.id = :parkID and n.isDeleted=0");
+            $query->setParameters(array(
+                'parkID' => $this->getUser()->getPark()->getId()
+            ));
+            $notifications = $query->getResult();
+
+            return $this->render('employe/index.html.twig',array(
+                'notifications' => $notifications
+            ));
         }
     }
 
@@ -85,7 +126,7 @@ class EmployeController extends Controller
                 $userAdmin->setPlainPassword('random'); // TODO : replace with random generation
                 $userAdmin->setEnabled(true);
                 $userAdmin->setFirstName($firstname);
-                $userAdmin->setLastName($firstname);
+                $userAdmin->setLastName($lastName);
                 $userAdmin->setStreetName($streetName);
                 $userAdmin->setHouseNumber($houseNumber);
                 $userAdmin->setHouseBox($houseBox);
@@ -94,7 +135,7 @@ class EmployeController extends Controller
                 $userAdmin->setNumberOfAdult($numberOfAdult);
                 $userAdmin->setNumberOfChild($numberOfChild);
 
-                $userManager->updateUser($userAdmin, $lastName);
+                $userManager->updateUser($userAdmin);
 
                 return $this->redirectToRoute('employe');
             }
