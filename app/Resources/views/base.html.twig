@@ -44,7 +44,8 @@
                         <li class="{% if app.request.attributes.get('_route') == 'addHousehold' %}active{% endif %}"><a href="./addHousehold">Add Household</a></li>
                         <li class="{% if app.request.attributes.get('_route') == 'makeDeposit' %}active{% endif %}"><a href="./makeDeposit">Make Deposit</a></li>
                     {% elseif app.user.role.name == "Gérant" %}
-
+                        <li class="{% if app.request.attributes.get('_route') == 'statistiques' %}active{% endif %}"><a href="./statistiques">Statistiques</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'occupations' %}active{% endif %}"><a href="./occupations">Occupations</a></li>
                     {% elseif app.user.role.name == "Ménage" %}
 
                     {% elseif app.user.role.name == "CEO" %}

@@ -20,9 +20,16 @@ class GerantController extends Controller
             return $this->redirect('./error');
         }
         else{
-            return $this->render('gerant/index.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-            ]);
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery("select n from AppBundle\Entity\Notification n inner join n.park as p where p.id = :parkID and n.isDeleted=0");
+            $query->setParameters(array(
+                'parkID' => $this->getUser()->getPark()->getId()
+            ));
+            $notifications = $query->getResult();
+
+            return $this->render('gerant/index.html.twig',array(
+                'notifications' => $notifications
+            ));
         }
     }
 }
