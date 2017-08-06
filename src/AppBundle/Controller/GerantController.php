@@ -58,4 +58,30 @@ class GerantController extends Controller
         }
         return new Response("Erreur : Ce n'est pas une requête Ajax", 400);
     }
+
+    /**
+     * @Route("/occupations", name="occupations")
+     */
+    public function occupations(Request $request)
+    {
+        if ($this->getUser() == null){
+            return $this->redirect('./login');
+        }
+        elseif ($this->getUser()->getRole()->getName() != 'Gérant'){
+            return $this->redirect('./error');
+        }
+        else{
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQuery(
+                "select n from AppBundle\Entity\Container n left join n.park as p left join n.waste_type as w where p.id = :parkID order by w.name ASC"
+            );
+            $query->setParameters(array(
+                'parkID' => $this->getUser()->getPark()->getId()
+            ));
+            $containers = $query->getResult();
+            return $this->render('gerant/occupations.html.twig',array(
+                'containers' => $containers
+            ));
+        }
+    }
 }

@@ -37,7 +37,7 @@ class Container
 
     /**
      * Many container have One waste_type.
-     * @ORM\ManyToOne(targetEntity="WasteType")
+     * @ORM\ManyToOne(targetEntity="WasteType",cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="waste_type_id", referencedColumnName="id")
      */
     private $waste_type;

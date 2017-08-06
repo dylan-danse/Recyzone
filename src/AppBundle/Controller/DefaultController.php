@@ -80,7 +80,16 @@ class DefaultController extends Controller
         $METAUX = new WasteType('métaux','');
         $PAPIER = new WasteType('papiers et cartons','');
 
-        $CONTAINER1 = new Container('',0,$JARDIN,$PARK1);
+        $CONTAINER1 = new Container('50',0,$JARDIN,$PARK1);
+        $CONTAINER2 = new Container('40',0,$JARDIN,$PARK1);
+        $CONTAINER3 = new Container('50',0,$ENCOMBRANT,$PARK1);
+        $CONTAINER4 = new Container('25',0,$ENCOMBRANT,$PARK1);
+        $CONTAINER5 = new Container('40',0,$BOIS,$PARK1);
+        $CONTAINER6 = new Container('50',0,$BRIQUE,$PARK1);
+        $CONTAINER7 = new Container('40',0,$TERRE,$PARK1);
+        $CONTAINER8 = new Container('50',0,$METAUX,$PARK1);
+        $CONTAINER9 = new Container('40',0,$PAPIER,$PARK1);
+        $CONTAINER10 = new Container('25',0,$PAPIER,$PARK1);
 
         if(count($this->getDoctrine()->getRepository('AppBundle:Commune')->findAll()) === 0){
             $em->persist($LIEGE);
@@ -139,6 +148,15 @@ class DefaultController extends Controller
         }
         if(count($this->getDoctrine()->getRepository('AppBundle:Container')->findAll()) === 0){
             $em->persist($CONTAINER1);
+            $em->persist($CONTAINER2);
+            $em->persist($CONTAINER3);
+            $em->persist($CONTAINER4);
+            $em->persist($CONTAINER5);
+            $em->persist($CONTAINER6);
+            $em->persist($CONTAINER7);
+            $em->persist($CONTAINER8);
+            $em->persist($CONTAINER9);
+            $em->persist($CONTAINER10);
         }
 
         $em->flush();
