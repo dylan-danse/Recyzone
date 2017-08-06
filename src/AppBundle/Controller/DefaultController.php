@@ -10,6 +10,7 @@ use AppBundle\Entity\WasteType;
 use AppBundle\Entity\Container;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
@@ -19,8 +20,6 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->addDefaultValueInDatabase();
-
         if ($this->getUser() == null){
             return $this->redirect('./login');
         }
@@ -44,60 +43,105 @@ class DefaultController extends Controller
         ]);*/
     }
 
-    private function addDefaultValueInDatabase(){
+    /**
+     * @Route("/DB", name="db")
+     */
+    public function addDefaultValueInDatabase(){
 
         $em = $this->getDoctrine()->getManager();
+        $userManager = $this->container->get('fos_user.user_manager');
+
+        $LIEGE = new Commune('Liège');
+        $PEPINSTER = new Commune('Pepinster');
+        $FLERON = new Commune('Fléron');
+        $HERVE = new Commune('Herve');
+
+        $CEO = new Role('CEO');
+        $GERANT = new Role('Gérant');
+        $EMPLOYE = new Role('Employé');
+        $MENAGE = new Role('Ménage');
+
+        $PARK1 = new Park('04/221.23.56','Rue du Péry','14','4000','Liège', $LIEGE);
+        $PARK2 = new Park('04/220.53.49','Avenue de l\'Avenir','45','4020','Wandre', $LIEGE);
+        $PARK3 = new Park('04/220.76.29','Rue Georges Crolon','5','4031','Angleur', $LIEGE);
+        $PARK4 = new Park('04/221.14.15','Rue du Tir','78','4020','Liège', $LIEGE);
+        $PARK5 = new Park('087/46.59.23','Avenue des Libertés','4','4860','Pepinster', $PEPINSTER);
+        $PARK6 = new Park('087/12.15.69','Rue des Clochers','56','4861','Soiron', $PEPINSTER);
+        $PARK7 = new Park('04/355.25.19','Rue de la Fosse','78','4620','Fléron', $FLERON);
+        $PARK8 = new Park('04/355.78.61','Rue des Gaillettes','95','4624','Romsée', $FLERON);
+        $PARK9 = new Park('087/69.36.56','Rue Jean-Marie Sitter','45','4650','Herve', $HERVE);
+        $PARK10 = new Park('087/69.12.13','Avenue du Cardon','9','4652','Xhendelesse', $HERVE);
+
+        $JARDIN = new WasteType('déchets de jardin', 13);
+        $ENCOMBRANT = new WasteType('encombrants',4);
+        $BOIS = new WasteType('bois',3);
+        $BRIQUE = new WasteType('briques et briquaillons',2.5);
+        $TERRE = new WasteType('terres et sables',2.5);
+        $METAUX = new WasteType('métaux','');
+        $PAPIER = new WasteType('papiers et cartons','');
+
+        $CONTAINER1 = new Container('',0,$JARDIN,$PARK1);
 
         if(count($this->getDoctrine()->getRepository('AppBundle:Commune')->findAll()) === 0){
-            $em->persist(new Commune('Liège'));
-            $em->persist(new Commune('Pepinster'));
-            $em->persist(new Commune('Fléron'));
-            $em->persist(new Commune('Herve'));
+            $em->persist($LIEGE);
+            $em->persist($PEPINSTER);
+            $em->persist($FLERON);
+            $em->persist($HERVE);
         }
         if(count($this->getDoctrine()->getRepository('AppBundle:Role')->findAll()) === 0){
-
+            $em->persist($CEO);
+            $em->persist($GERANT);
+            $em->persist($EMPLOYE);
+            $em->persist($MENAGE);
         }
         if(count($this->getDoctrine()->getRepository('AppBundle:Park')->findAll()) === 0){
-            $communes = $em->getRepository('AppBundle:Commune');
-            $em->persist(new Park('04/221.23.56','Rue du Péry','14','4000','Liège', $communes->findOneByName('Liège')));
-            $em->persist(new Park('04/220.53.49','Avenue de l\'Avenir','45','4020','Wandre', $communes->findOneByName('Liège')));
-            $em->persist(new Park('04/220.76.29','Rue Georges Crolon','5','4031','Angleur', $communes->findOneByName('Liège')));
-            $em->persist(new Park('04/221.14.15','Rue du Tir','78','4020','Liège', $communes->findOneByName('Liège')));
-            $em->persist(new Park('087/46.59.23','Avenue des Libertés','4','4860','Pepinster', $communes->findOneByName('Pepinster')));
-            $em->persist(new Park('087/12.15.69','Rue des Clochers','56','4861','Soiron', $communes->findOneByName('Pepinster')));
-            $em->persist(new Park('04/355.25.19','Rue de la Fosse','78','4620','Fléron', $communes->findOneByName('Fléron')));
-            $em->persist(new Park('04/355.78.61','Rue des Gaillettes','95','4624','Romsée', $communes->findOneByName('Fléron')));
-            $em->persist(new Park('087/69.36.56','Rue Jean-Marie Sitter','45','4650','Herve', $communes->findOneByName('Herve')));
-            $em->persist(new Park('087/69.12.13','Avenue du Cardon','9','4652','Xhendelesse', $communes->findOneByName('Herve')));
+            $em->persist($PARK1);
+            $em->persist($PARK2);
+            $em->persist($PARK3);
+            $em->persist($PARK4);
+            $em->persist($PARK5);
+            $em->persist($PARK6);
+            $em->persist($PARK7);
+            $em->persist($PARK8);
+            $em->persist($PARK9);
+            $em->persist($PARK10);
         }
         if(count($this->getDoctrine()->getRepository('AppBundle:User')->findAll()) === 0){
-            //- Hérant, Guillaume, g.herant@recyzone.be, gherant, azerty, gérant de l’intercommunale.
-            $userManager = $this->container->get('fos_user.user_manager');
-            $userAdmin = $userManager->createUser();
+            $userManager->updateUser(new User(
+                    'dylan','d.danse@recyzone.be','dylan',
+                    'Dylan', 'Danse',
+                    '','','','','',
+                    '','', $EMPLOYE, $PARK1)
+            );
 
-            $userAdmin;
-            /*$userAdmin->setEmail($email);
-            $userAdmin->setPlainPassword('random'); // TODO : replace with random generation
-            $userAdmin->setEnabled(true);
-            $userAdmin->setFirstName($firstname);
-            $userAdmin->setLastName($firstname);
-            $userAdmin->setStreetName($streetName);
-            $userAdmin->setHouseNumber($houseNumber);
-            $userAdmin->setHouseBox($houseBox);
-            $userAdmin->setCommune($commune);
-            $userAdmin->setCity($city);
-            $userAdmin->setNumberOfAdult($numberOfAdult);
-            $userAdmin->setNumberOfChild($numberOfChild);*/
+            $userManager->updateUser(new User(
+                    'azerty','g.herant@recyzone.be','gherant',
+                    'Guillaume', 'Hérant',
+                    '','','','','',
+                    '','', $CEO, $PARK1)
+            );
 
-            $userManager->updateUser($userAdmin, $lastName);
+            $userManager->updateUser(new User(
+                    'azerty','l.joiris@recyzone.be','ljoiris',
+                    'Joiris', 'Luc',
+                    '','','','','',
+                    '','', $GERANT, $PARK1)
+            );
         }
         if(count($this->getDoctrine()->getRepository('AppBundle:WasteType')->findAll()) === 0){
-
+            $em->persist($JARDIN);
+            $em->persist($ENCOMBRANT);
+            $em->persist($BOIS);
+            $em->persist($BRIQUE);
+            $em->persist($TERRE);
+            $em->persist($METAUX);
+            $em->persist($PAPIER);
         }
         if(count($this->getDoctrine()->getRepository('AppBundle:Container')->findAll()) === 0){
-
+            $em->persist($CONTAINER1);
         }
 
         $em->flush();
+        return new Response('DB successfully filled !',200);
     }
 }

@@ -44,10 +44,25 @@ class Container
 
     /**
      * Many containers have One park.
-     * @ORM\ManyToOne(targetEntity="Park")
+     * @ORM\ManyToOne(targetEntity="Park",cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="park_id", referencedColumnName="id")
      */
     private $park;
+
+    /**
+     * Container constructor.
+     * @param float $capacity
+     * @param float $usedVolume
+     * @param $waste_type
+     * @param $park
+     */
+    public function __construct($capacity, $usedVolume, $waste_type, $park)
+    {
+        $this->capacity = $capacity;
+        $this->usedVolume = $usedVolume;
+        $this->waste_type = $waste_type;
+        $this->park = $park;
+    }
 
     /**
      * @return mixed

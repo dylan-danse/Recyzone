@@ -75,7 +75,7 @@ class Park
 
     /**
      * Many parks have One commune.
-     * @ORM\ManyToOne(targetEntity="Commune")
+     * @ORM\ManyToOne(targetEntity="Commune",cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="commune_id", referencedColumnName="id")
      */
     private $commune;

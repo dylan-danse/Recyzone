@@ -120,8 +120,13 @@ class User extends BaseUser implements \JsonSerializable
      * @param string $correctionCoeff
      * @param $role
      */
-    public function __construct($firstName, $lastName, $streetName, $houseNumber, $houseBox, $commune, $city, $numberOfChild, $numberOfAdult)
+    public function __construct($password,$email,$username,$firstName, $lastName, $streetName, $houseNumber, $houseBox, $commune, $city, $numberOfChild, $numberOfAdult, $role, $park)
     {
+        $this->setPlainPassword($password);
+        $this->setEmail($email);
+        $this->setEnabled(true);
+        $this->setUsername($username);
+
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->streetName = $streetName;
@@ -131,7 +136,44 @@ class User extends BaseUser implements \JsonSerializable
         $this->city = $city;
         $this->numberOfChild = $numberOfChild;
         $this->numberOfAdult = $numberOfAdult;
-        //$this->correctionCoeff = $correctionCoeff;
+        $this->setRole($role);
+        $this->setPark($park);
+
+        //TODO : without control structure ?
+        if($numberOfChild<=3){
+            if($numberOfAdult<=2){
+                $this->correctionCoeff = 0;
+            } elseif ($numberOfAdult<=4){
+                $this->correctionCoeff = 5;
+            } else {
+                $this->correctionCoeff = 10;
+            }
+        } else {
+            if($numberOfAdult<=2){
+                $this->correctionCoeff = 5;
+            } elseif ($numberOfAdult<=4){
+                $this->correctionCoeff = 10;
+            } else {
+                $this->correctionCoeff = 15;
+            }
+        }
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPark()
+    {
+        return $this->park;
+    }
+
+    /**
+     * @param mixed $park
+     */
+    public function setPark($park)
+    {
+        $this->park = $park;
     }
 
     /**
@@ -153,10 +195,17 @@ class User extends BaseUser implements \JsonSerializable
 
     /**
      * Many Users have One Role.
-     * @ORM\ManyToOne(targetEntity="Role")
+     * @ORM\ManyToOne(targetEntity="Role",cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      */
     private $role;
+
+    /**
+     * Many Users have One Park.
+     * @ORM\ManyToOne(targetEntity="Park",cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="park_id", referencedColumnName="id")
+     */
+    private $park;
 
 
 

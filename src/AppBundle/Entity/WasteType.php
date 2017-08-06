@@ -36,6 +36,17 @@ class WasteType
     private $annual_quota;
 
     /**
+     * WasteType constructor.
+     * @param string $name
+     * @param string $annual_quota
+     */
+    public function __construct($name, $annual_quota)
+    {
+        $this->name = $name;
+        $this->annual_quota = $annual_quota;
+    }
+
+    /**
      * @return string
      */
     public function getAnnualQuota()
