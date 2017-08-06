@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * WasteType
+ * Commune
  *
- * @ORM\Table(name="waste_type")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\WasteTypeRepository")
+ * @ORM\Table(name="commune")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CommuneRepository")
  */
-class WasteType
+class Commune
 {
     /**
      * @var int
@@ -29,26 +29,12 @@ class WasteType
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="annual_quota", type="integer")
+     * Commune constructor.
+     * @param string $name
      */
-    private $annual_quota;
-
-    /**
-     * @return string
-     */
-    public function getAnnualQuota()
+    public function __construct($name)
     {
-        return $this->annual_quota;
-    }
-
-    /**
-     * @param string $annual_quota
-     */
-    public function setAnnualQuota($annual_quota)
-    {
-        $this->annual_quota = $annual_quota;
+        $this->name = $name;
     }
 
 
@@ -67,7 +53,7 @@ class WasteType
      *
      * @param string $name
      *
-     * @return WasteType
+     * @return Commune
      */
     public function setName($name)
     {

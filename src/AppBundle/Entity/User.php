@@ -85,7 +85,7 @@ class User extends BaseUser implements \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="numberOfChild", type="string", length=255, nullable=true)
+     * @ORM\Column(name="numberOfChild", type="integer", nullable=true)
      * )
      */
     private $numberOfChild;
@@ -93,10 +93,63 @@ class User extends BaseUser implements \JsonSerializable
     /**
      * @var string
      *
-     * @ORM\Column(name="numberOfAdult", type="string", length=255, nullable=true)
+     * @ORM\Column(name="numberOfAdult", type="integer", nullable=true)
      * )
      */
     private $numberOfAdult;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correction_coeff", type="float", nullable=true)
+     * )
+     */
+    private $correctionCoeff;
+
+    /**
+     * User constructor.
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $streetName
+     * @param string $houseNumber
+     * @param string $houseBox
+     * @param string $commune
+     * @param string $city
+     * @param string $numberOfChild
+     * @param string $numberOfAdult
+     * @param string $correctionCoeff
+     * @param $role
+     */
+    public function __construct($firstName, $lastName, $streetName, $houseNumber, $houseBox, $commune, $city, $numberOfChild, $numberOfAdult)
+    {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->streetName = $streetName;
+        $this->houseNumber = $houseNumber;
+        $this->houseBox = $houseBox;
+        $this->commune = $commune;
+        $this->city = $city;
+        $this->numberOfChild = $numberOfChild;
+        $this->numberOfAdult = $numberOfAdult;
+        //$this->correctionCoeff = $correctionCoeff;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCorrectionCoeff()
+    {
+        return $this->correctionCoeff;
+    }
+
+    /**
+     * @param string $correctionCoeff
+     */
+    public function setCorrectionCoeff($correctionCoeff)
+    {
+        $this->correctionCoeff = $correctionCoeff;
+    }
+
 
     /**
      * Many Users have One Role.
@@ -105,11 +158,7 @@ class User extends BaseUser implements \JsonSerializable
      */
     private $role;
 
-    public function __construct()
-    {
-        parent::__construct();
-        // your own logic
-    }
+
 
     /**
      * Set firstName
