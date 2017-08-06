@@ -23,35 +23,36 @@ class EmployeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        /*$currentTime = date('H:i a');
-        $openingWeekMorning =         \DateTime::createFromFormat('H:i a', "");
-        $closingWeekMorning =         \DateTime::createFromFormat('H:i a', "");
-        $openingWeekAfternoon =       \DateTime::createFromFormat('H:i a', "1 pm");
-        $closingWeekAfternoon =       \DateTime::createFromFormat('H:i a', "4 pm");
-        $openingSaturdayMorning =     \DateTime::createFromFormat('H:i a', "");
-        $closingSaturdayMorning =     \DateTime::createFromFormat('H:i a', "");
-        $openingSaturdayAfternoon =   \DateTime::createFromFormat('H:i a', "1 pm");
-        $closingSaturdayAfternon =    \DateTime::createFromFormat('H:i a', "5 pm");
-        die("HERE : " + $openingWeekAfternoon);
+        /* TODO : TO BE REACTIVATED, DESACTIVATED FOR TESTING PURPOSE
+        $currentTime = date('H:i a');
+        $openingWeekMorning =         \DateTime::createFromFormat('H:i', "09:00");
+        $closingWeekMorning =         \DateTime::createFromFormat('H:i', "12:15");
+        $openingWeekAfternoon =       \DateTime::createFromFormat('H:i', "13:00");
+        $closingWeekAfternoon =       \DateTime::createFromFormat('H:i', "15:45");
+        $openingSaturdayMorning =     \DateTime::createFromFormat('H:i', "08:30");
+        $closingSaturdayMorning =     \DateTime::createFromFormat('H:i', "12:15");
+        $openingSaturdayAfternoon =   \DateTime::createFromFormat('H:i', "13:00");
+        $closingSaturdayAfternon =    \DateTime::createFromFormat('H:i', "16:45");
+
 
         switch (date('D')){
-            case 'Mon':
-                die ("PARK IS CLOSED BECAUSE IT IS MONDAY OR SUNDAY");
-                break;
             case 'Sun':
+            case 'Mon':
+                return $this->render('employe/depositClosed.html.twig');
             case 'Tue':
             case 'Wed':
             case 'Thu':
             case 'Fri':
-                if ($currentTime > $openingWeekAfternoon && $currentTime < $closingWeekAfternoon){
-                    die("ITS OK : " + $currentTime);
-                }
-                else{
-                    die($openingWeekAfternoon);
+                if ($currentTime < $openingWeekMorning && $currentTime > $closingWeekMorning ||
+                    $currentTime < $openingWeekAfternoon && $currentTime > $closingWeekAfternoon){
+                    return $this->render('employe/depositClosed.html.twig');
                 }
                 break;
             case 'Sat':
-                die ("SAMEDI");
+                if ($currentTime < $openingSaturdayMorning && $currentTime > $closingSaturdayMorning ||
+                    $currentTime < $openingSaturdayAfternoon && $currentTime > $closingSaturdayAfternon){
+                    return $this->render('employe/depositClosed.html.twig');
+                }
                 break;
         }*/
 

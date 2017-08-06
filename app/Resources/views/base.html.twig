@@ -56,7 +56,7 @@
 
                 <ul class="nav navbar-nav navbar-right">
                         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                            <li><p class="navbar-text">{{ app.user.firstName }} {{ app.user.lastName}} - {{ 'now'|date('d - m -Y') }}</p></li>
+                            <li><a href="#">{{ app.user.firstName }} {{ app.user.lastName}} ({{ 'now'|date('d-m-Y') }})</a></li>
                             <li><a href="{{ path('fos_user_security_logout') }}">Logout</a></li>
                         {% else %}
                             <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
