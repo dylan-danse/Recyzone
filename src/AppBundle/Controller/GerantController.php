@@ -2,9 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Notification;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class GerantController extends Controller
 {
@@ -31,5 +34,28 @@ class GerantController extends Controller
                 'notifications' => $notifications
             ));
         }
+    }
+
+    /**
+     * @Route("/archiveNotifications", name="archiveNotifications")
+     */
+    public function archiveNotifications(Request $request)
+    {
+        if($request->isXmlHttpRequest())
+        {
+            $param = $request->get("id");
+            $param = substr($param,1, strlen($param)-2);
+            $param = explode(",", $param);
+            foreach ($param as $id) {
+                $em = $this->getDoctrine()->getManager();
+                $current = $em->getRepository('AppBundle:Notification')->find(intval(substr($id,1,2)));
+                if($current){
+                    $current->setIsDeleted(true);
+                }
+                $em->flush();
+            }
+            return new Response("Supprimé avec succès", 200);
+        }
+        return new Response("Erreur : Ce n'est pas une requête Ajax", 400);
     }
 }
