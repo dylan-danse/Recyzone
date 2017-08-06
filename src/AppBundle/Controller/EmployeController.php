@@ -138,7 +138,7 @@ class EmployeController extends Controller
             $usersTemp = $userManager->findUsers();
             $usersFinal = array();
             foreach ($usersTemp as $user){
-                if(strpos($user->getUsername(), $param) !== false){
+                if(strpos($user->getUsername(), $param) !== false && $user->getRole()->getName()==="Ménage"){
                     array_push($usersFinal,$user);
                 }
             }
