@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,9 +21,11 @@ class MenageController extends Controller
             return $this->redirect('./error');
         }
         else{
-            return $this->render('menage/index.html.twig', [
-                'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-            ]);
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository(User::class)->find($this->getUser()->getId());
+            return $this->render('menage/index.html.twig',array(
+                'user' => $user
+            ));
         }
     }
 }

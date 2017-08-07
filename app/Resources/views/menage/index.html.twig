@@ -5,10 +5,10 @@
     <div class="row">
         <h1>Vos données</h1>
         <br>
-        <p>nom prénom mail</p>
-        <p>adresse</p>
-        <p>Composition de ménage : x adultes - y enfants</p>
-        <p>Coefficient de correction : </p>
+        <p>{{ user.lastName }} {{ user.firstName }} ({{ user.email }})</p>
+        <p>{{ user.houseNumber }} {{ user.streetName }} - xxxx {{ user.city }}</p>
+        <p>Composition de ménage : {{ user.numberOfAdult }} adultes - {{ user.numberOfChild }} enfants</p>
+        <p>Coefficient de correction : {{ user.correctionCoeff }}%</p>
     </div>
 
     <br>
