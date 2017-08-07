@@ -7,6 +7,7 @@ use AppBundle\Entity\User;
 use function MongoDB\BSON\toJSON;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -177,6 +178,25 @@ class EmployeController extends Controller
             return new JsonResponse(array('data' => json_encode($usersFinal)));
         }
         return new Response("Erreur : Ce n'est pas une requête Ajax", 400);
+    }
+
+    /**
+     * @Route("/addWastes", name="addWastes")
+     */
+    public function addWastes(Request $request)
+    {
+        try{
+            //$temp = $request->request->get('data', 'NOT FOUND');
+            $temp = $request->getContent();
+            foreach(json_decode($temp, true) as $item){
+                print_r($item['data']);
+                print_r($item['id']);
+            }
+            return new Response("", 200);
+
+        } catch (Exception $ex){
+            return new Response($ex->getMessage(), 200);
+        }
     }
 
 }

@@ -155,9 +155,20 @@
                     console.log($(this).find("#quota").text());
                 });
 
-                //HERE AJAX CALL
-                //$('#alertSuccess').slideUp(300).fadeIn(400).delay(1500).fadeOut();
-                $('#alertError').slideUp(300).fadeIn(400).delay(1500).fadeOut();
+                $.ajax({
+                    url: "./addWastes",
+                    method: "post",
+                    data: '{ "data" : "test" }',
+                    dataType: "JSON",
+                    success: function(msg){
+                        alert(msg);
+                        $('#alertSuccess').slideUp(300).fadeIn(400).delay(1500).fadeOut();
+                    },
+                    error: function(){
+                        $('#alertError').slideUp(300).fadeIn(400).delay(1500).fadeOut();
+                    }
+                });
+
             }
         }
 

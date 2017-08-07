@@ -88,7 +88,7 @@ class GerantController extends Controller
     /**
      * @Route("/statistiques", name="statistiques")
      */
-    public function v(Request $request)
+    public function statistiques(Request $request)
     {
         if ($this->getUser() == null){
             return $this->redirect('./login');
