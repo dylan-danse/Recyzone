@@ -2,7 +2,52 @@
 
 {% block body %}
 
-<h1>Index Ménage</h1>
+    <div class="row">
+        <h1>Vos données</h1>
+        <br>
+        <p>nom prénom mail</p>
+        <p>adresse</p>
+        <p>Composition de ménage : x adultes - y enfants</p>
+        <p>Coefficient de correction : </p>
+    </div>
 
+    <br>
+    <hr>
+    <br>
+
+    <div class="row">
+        <h1>Vos quotas actuels</h1>
+        <br>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Type de déchet</th>
+                <th>Volume déposé</th>
+                <th>Volume autorisé</th>
+                <th>Reste</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Test</td>
+                <td>0 m3</td>
+                <td>10 m3</td>
+                <td>10 m3</td>
+            </tr>
+            <tr>
+                <td>Test</td>
+                <td>0 m3</td>
+                <td>10 m3</td>
+                <td>10 m3</td>
+            </tr>
+            <tr>
+                <td>Test</td>
+                <td>0 m3</td>
+                <td>10 m3</td>
+                <td>10 m3</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}

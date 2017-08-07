@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1 class="text-center">Statistiques</h1>
+
+<br>
+<br>
+
+    <form class="form-inline text-center">
+        <div class="form-group">
+            <select class="form-control">
+                <option selected>Journalier</option>
+                <option>Mensuel</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select class="form-control">
+                <option selected>Nombre moyen de visite</option>
+                <option>Moyenne des volumes de déchets</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select class="form-control">
+                <option selected>Tous les déchets</option>
+                <option>x</option>
+                <option>x</option>
+                <option>x</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default">Générer</button>
+    </form>
+
+    <br>
+    <br>
+
+    <table id="notificationTable" class="table table-striped table-hover text-center">
+        <thead>
+            <tr>
+                <th class="text-center">Jour</th>
+                <th class="text-center">Nombre moyen de visite</th> <!--equal to what is selected in listbox-->
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <th class="text-center">Jour</th>
+                <th class="text-center">Nombre moyen de visite</th>
+            </tr>
+
+        </tbody>
+    </table>
+
+{% endblock %}

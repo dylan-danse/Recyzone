@@ -2,7 +2,71 @@
 
 {% block body %}
 
-<h1>Index CEO</h1>
+
+    <br>
+    <br>
+
+    <table id="notificationTable" class="table table-striped table-hover text-center">
+        <thead>
+        <tr>
+            <th class="text-center">Conteneur</th>
+            <th class="text-center">Parc</th>
+            <th class="text-center">Type de déchets</th>
+            <th class="text-center">Volume</th>
+            <th class="text-center">Remplissage</th>
+            <th class="text-center">Selectionner</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for container in containers %}
+            <tr>
+                <td>{{ container.id }}</td>
+                <td>Adresse</td>
+                <td>{{ container.wasteType.name }}</td>
+                <td>{{ container.capacity }}</td>
+                <td>{% set percentage = container.usedVolume/container.capacity*100 %} {{ percentage }}%</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="6" align="center"><button onclick="generateTournee()" class="btn btn-danger pull-right">Générer tournée</button></td>
+        </tr>
+        <tr>
+            <td colspan="6" align="center"><button onclick="generateBill()" class="btn btn-danger pull-right">Générer factures</button></td>
+        </tr>
+        </tfoot>
+    </table>
+
+
+    <script>
+        $('input[type=checkbox]').change(function () {
+            $(this).closest('tr').find('td').toggleClass('danger', this.checked);
+        });
+
+        function generateBill(){
+            alert("Pas à implémenter pour ce projet")
+        }
+
+        function generateBill(){
+            /*var param = [];
+            var rows = $('input:checkbox:checked').parents("tr");
+
+            $.each(rows, function(i, item){
+                param.push($(item).find('#notificationId').val());
+            });
+
+            $.ajax({
+                url: "./archiveNotifications",
+                method: "post",
+                data: {id: JSON.stringify(param)},
+            }).done(function(msg){
+                rows.remove();
+                console.log(msg);
+            });*/
+        }
+    </script>
 
 
 {% endblock %}
