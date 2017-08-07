@@ -82,15 +82,27 @@
         <tbody id="bodyWasteTable">
         </tbody>
     </table>
+    <div class="col-md-offset-4 col-md-4">
+        <button type="button" class="btn btn-danger btn-block" onclick="deleteSelectedRows()">Supprimer</button>
+        <button type="button" class="btn btn-success btn-block" onclick="validateDeposit()">Confirmer</button>
+    </div>
+</div>
+
+    <br>
+    <br>
+
+
+<div class="row">
+    <div hidden id="alertSuccess" class="alert alert-success alert-dismissible text-center" role="alert">
+        Dépôt effectué avec succès !
+    </div>
+    <div hidden id="alertError" class="alert alert-danger text-center" role="alert">
+        Dépôt refusé...
+    </div>
+</div>
 
 </div>
 
-<div class="row col-md-offset-4 col-md-4">
-    <button type="button" class="btn btn-danger btn-block" onclick="deleteSelectedRows()">Supprimer</button>
-    <button type="button" class="btn btn-success btn-block" onclick="validateDeposit()">Confirmer</button>
-</div>
-
-</div>
 
     <!-- reject if hour is not ok
 
@@ -137,12 +149,15 @@
                 alert('Veuillez choisir un utilisateur');
             }
             else{
-                console.log(userSelected);
                 $('#wasteTable > tbody  > tr').each(function(index, elem) {
                     console.log($(this).find("#wasteType").text());
                     console.log($(this).find("#wasteVolume").text());
                     console.log($(this).find("#quota").text());
                 });
+
+                //HERE AJAX CALL
+                //$('#alertSuccess').slideUp(300).fadeIn(400).delay(1500).fadeOut();
+                $('#alertError').slideUp(300).fadeIn(400).delay(1500).fadeOut();
             }
         }
 

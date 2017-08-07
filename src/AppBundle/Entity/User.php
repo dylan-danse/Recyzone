@@ -106,6 +106,7 @@ class User extends BaseUser implements \JsonSerializable
      */
     private $correctionCoeff;
 
+
     /**
      * User constructor.
      * @param string $firstName

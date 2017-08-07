@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
 use function MongoDB\BSON\toJSON;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -89,8 +90,7 @@ class EmployeController extends Controller
         }
         else{
 
-            $household = new User();
-            $form = $this->createFormBuilder($household)
+            $form = $this->createFormBuilder()
                 ->add('firstname', TextType::class, array('attr' => array('class' => 'form-control')))
                 ->add('lastName', TextType::class, array('attr' => array('class' => 'form-control')))
                 ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
@@ -120,21 +120,11 @@ class EmployeController extends Controller
                 $numberOfChild = $form['numberOfChild']->getData();
 
                 $userManager = $this->container->get('fos_user.user_manager');
-                $userAdmin = $userManager->createUser();
-
-                $userAdmin->setUsername(explode("@", $email, 2)[0]);
-                $userAdmin->setEmail($email);
-                $userAdmin->setPlainPassword('random'); // TODO : replace with random generation
-                $userAdmin->setEnabled(true);
-                $userAdmin->setFirstName($firstname);
-                $userAdmin->setLastName($lastName);
-                $userAdmin->setStreetName($streetName);
-                $userAdmin->setHouseNumber($houseNumber);
-                $userAdmin->setHouseBox($houseBox);
-                $userAdmin->setCommune($commune);
-                $userAdmin->setCity($city);
-                $userAdmin->setNumberOfAdult($numberOfAdult);
-                $userAdmin->setNumberOfChild($numberOfChild);
+                $userAdmin = new User('random',$email,explode("@", $email, 2)[0],
+                    $firstname,$lastName,$streetName,$houseNumber,$houseBox,$commune,$city,$numberOfChild,$numberOfAdult,
+                    $this->getDoctrine()->getRepository("AppBundle:Role")->findOneByName(array("Ménage")),
+                    $this->getUser()->getPark());
+                // TODO : replace with random password generation
 
                 $userManager->updateUser($userAdmin);
 
