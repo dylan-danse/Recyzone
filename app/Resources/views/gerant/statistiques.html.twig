@@ -80,7 +80,6 @@
             var period = $('#selectPeriod').find(":selected").val();
             var wasteType = $('#selectWasteType').find(":selected").val();
             var url = "/statistiques/" + period + "/" + visiteOrVolume + "/" + wasteType + ""
-            alert(url);
 
             $.ajax({
                 url: url,
@@ -92,14 +91,14 @@
 
         function refreshStatTable(msg){
             var tbody = '';
-            /*
+
             $.each(JSON.parse(msg['data']), function(i, item){
                 tbody +=  "<tr class='text-center'>  \
-                                <td>" + hello + " </td> \
-                                <td>" + world + "</td> \
+                                <td>" + item['key'] + " </td> \
+                                <td>" + item['value'] + "</td> \
                             </tr>";
             });
-            */
+
 
             if(tbody===''){
                 tbody += '<tr class="text-center"><td colspan=\"4\">Aucune statistiques disponibles !</td></tr>';

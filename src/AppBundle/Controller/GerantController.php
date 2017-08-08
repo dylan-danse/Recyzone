@@ -97,7 +97,7 @@ class GerantController extends Controller
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQueryBuilder();
         $parkId = $this->getUser()->getPark()->getId();
-        
+
         $periodDQL = "";
         $volumeOrVisiteDQL = "";
         $wasteDQL = "";
@@ -124,14 +124,13 @@ class GerantController extends Controller
             ->leftJoin('d.container','c')
             ->leftJoin('c.park','p')
             ->leftJoin('d.waste_type','w')
-            ->where('p.id = '.$parkId)
-            ->andWhere(($wasteDQL === "")?'true':'w.id='.$wasteDQL)
+            ->where(($this->getUser()->getRole()->getName() === "CEO")?'0=0':'p.id = '.$parkId)
+            ->andWhere(($wasteDQL === "")?'0=0':'w.id='.$wasteDQL)
             ->groupBy('key');
 
         $stats = $query->getQuery()->getResult();
 
-        print_r($stats);
-        return new Response();
+        return new JsonResponse(array('data' => json_encode($stats)));
     }
 
     public function redirectIfNotGerant(){
