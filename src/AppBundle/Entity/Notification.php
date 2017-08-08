@@ -50,6 +50,21 @@ class Notification
     private $park;
 
     /**
+     * Notification constructor.
+     * @param \DateTime $creationDate
+     * @param string $description
+     * @param bool $isDeleted
+     * @param $park
+     */
+    public function __construct(\DateTime $creationDate, $description, $isDeleted, $park)
+    {
+        $this->creationDate = $creationDate;
+        $this->description = $description;
+        $this->isDeleted = $isDeleted;
+        $this->park = $park;
+    }
+
+    /**
      * @return mixed
      */
     public function getPark()

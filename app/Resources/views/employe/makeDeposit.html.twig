@@ -149,24 +149,24 @@
                 alert('Veuillez choisir un utilisateur');
             }
             else{
+                var array = [];
                 $('#wasteTable > tbody  > tr').each(function(index, elem) {
-                    console.log($(this).find("#wasteType").text());
-                    console.log($(this).find("#wasteVolume").text());
-                    console.log($(this).find("#quota").text());
+                    array[array.length] =
+                        {
+                            type:$(this).find("#wasteType").text(),
+                            volume: $(this).find("#wasteVolume").text(),
+                            user: 1
+                        }
                 });
-
                 $.ajax({
                     url: "./addWastes",
                     method: "post",
-                    data: '{ "data" : "test" }',
-                    dataType: "JSON",
-                    success: function(msg){
-                        alert(msg);
-                        $('#alertSuccess').slideUp(300).fadeIn(400).delay(1500).fadeOut();
-                    },
-                    error: function(){
-                        $('#alertError').slideUp(300).fadeIn(400).delay(1500).fadeOut();
-                    }
+                    data: JSON.stringify(array),
+                    contentType: "application/json"
+                }).done(function(msg) {
+                    $('#alertSuccess').slideUp(300).fadeIn(400).delay(1500).fadeOut();
+                }).fail(function() {
+                    $('#alertError').slideUp(300).fadeIn(400).delay(1500).fadeOut();
                 });
 
             }

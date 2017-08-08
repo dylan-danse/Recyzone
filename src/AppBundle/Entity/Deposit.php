@@ -44,7 +44,7 @@ class Deposit
 
     /**
      * Many deposit have One waste type.
-     * @ORM\ManyToOne(targetEntity="Park")
+     * @ORM\ManyToOne(targetEntity="WasteType")
      * @ORM\JoinColumn(name="waste_type_id", referencedColumnName="id")
      */
     private $waste_type;
@@ -62,6 +62,25 @@ class Deposit
      * @ORM\JoinColumn(name="container_id", referencedColumnName="id")
      */
     private $container;
+
+    /**
+     * Deposit constructor.
+     * @param float $quantity
+     * @param float $amountInEuros
+     * @param \DateTime $creationDate
+     * @param $waste_type
+     * @param $household
+     * @param $container
+     */
+    public function __construct($quantity, $amountInEuros, \DateTime $creationDate, $waste_type, $household, $container)
+    {
+        $this->quantity = $quantity;
+        $this->amountInEuros = $amountInEuros;
+        $this->creationDate = $creationDate;
+        $this->waste_type = $waste_type;
+        $this->household = $household;
+        $this->container = $container;
+    }
 
     /**
      * @return mixed

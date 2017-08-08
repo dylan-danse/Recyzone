@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Deposit;
+use AppBundle\Entity\Notification;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
 use function MongoDB\BSON\toJSON;
@@ -186,17 +188,75 @@ class EmployeController extends Controller
     public function addWastes(Request $request)
     {
         try{
-            //$temp = $request->request->get('data', 'NOT FOUND');
-            $temp = $request->getContent();
-            foreach(json_decode($temp, true) as $item){
-                print_r($item['data']);
-                print_r($item['id']);
+            $temp = json_decode($request->getContent(), true);
+
+            $em = $this->getDoctrine()->getManager();
+            $query = $em->createQueryBuilder();
+
+            foreach($temp as $item){
+                $houseHold = $em->getRepository("AppBundle:User")->find($item['user']);
+                $wasteType = $em->getRepository("AppBundle:WasteType")->findOneBy(array('name' => $item['type']));
+                $volume = substr($item['volume'],0,strlen($item['volume'])-2);
+                $query->select('c')
+                    ->from('AppBundle:Container', 'c')
+                    ->leftJoin('c.park', 'p')
+                    ->leftJoin('c.waste_type','w')
+                    ->where("w.name = ?2")
+                    ->andWhere('p.id = ?1')
+                    ->andWhere('c.capacity-c.usedVolume > ?3')
+                    ->orderBy('c.capacity-c.usedVolume', 'ASC')
+                    ->setParameters(
+                        array(
+                            1 => $this->getUser()->getPark()->getId(),
+                            2 => $wasteType->getName(),
+                            3 => $volume
+                        )
+                    )
+                    ->setMaxResults(1);
+                $container = $query->getQuery()->getSingleResult();
+                $em->persist(new Deposit($volume,0,new \DateTime("now"),$wasteType,$houseHold,$container));
+                $container->setUsedVolume($container->getUsedVolume()+$volume);
+                if($container->getCompletionPercentage() >= 80){
+                    $em->persist(new Notification(new \DateTime("now"),"Conteneur".$container->getId()." rempli à ".$container->getCompletionPercentage()."%", false,$this->getUser()->getPark()));
+                }
+                $em->flush();
             }
-            return new Response("", 200);
+            return new JsonResponse("Dépôt effectué avec succès !", 200);
 
         } catch (Exception $ex){
-            return new Response($ex->getMessage(), 200);
+            return new JsonResponse($ex->getMessage(), 500);
         }
     }
 
+    /**
+     * @Route("/test", name="test")
+     */
+    public function test(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQueryBuilder();
+        $houseHold = $em->getRepository("AppBundle:User")->find(1);
+        $wasteType = $em->getRepository("AppBundle:WasteType")->find(1);
+
+        $query->select('c.id as id, c.capacity-c.usedVolume as remaining_volume')
+            ->from('AppBundle:Container', 'c')
+            ->leftJoin('c.park', 'p')
+            ->leftJoin('c.waste_type','w')
+            ->where("w.name = ?2")
+            ->andWhere('p.id = ?1')
+            ->andWhere('c.capacity-c.usedVolume > ?3')
+            ->orderBy('c.capacity-c.usedVolume', 'ASC')
+            ->setParameters(
+                array(
+                    1 => 1,
+                    2 => "déchets de jardin",
+                    3 => 30
+                )
+            )
+            ->setMaxResults(1);
+
+        $result = $query->getQuery()->getResult();
+        print_r($result);
+        return new JsonResponse("", 200);
+    }
 }

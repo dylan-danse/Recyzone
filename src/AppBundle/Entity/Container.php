@@ -154,5 +154,9 @@ class Container
     {
         return $this->usedVolume;
     }
+
+    public function getCompletionPercentage(){
+        return $this->getUsedVolume()/$this->getCapacity()*100;
+    }
 }
 
