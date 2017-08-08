@@ -9,26 +9,26 @@
 
     <form class="form-inline text-center">
         <div class="form-group">
-            <select class="form-control">
-                <option selected>Journalier</option>
-                <option>Mensuel</option>
+            <select id="selectPeriod" class="form-control" onchange="changePeriodSelect()">
+                <option selected value="journalier">Journalier</option>
+                <option value="mensuel">Mensuel</option>
             </select>
         </div>
         <div class="form-group">
-            <select class="form-control">
-                <option selected>Nombre moyen de visite</option>
-                <option>Moyenne des volumes de déchets</option>
+            <select id="selectVisiteOrVolume" class="form-control" onchange="changeVisiteAndVolumeSelect()">
+                <option selected value="visite">Nombre moyen de visite</option>
+                <option value="volume">Moyenne des volumes de déchets</option>
             </select>
         </div>
-        <div class="form-group">
-            <select class="form-control">
-                <option selected>Tous les déchets</option>
-                <option>x</option>
-                <option>x</option>
-                <option>x</option>
+        <div id="wasteTypeSelectDiv" style="display: none;" class="form-group">
+            <select id="selectWasteType" class="form-control">
+                <option selected disabled value="0">Tous les déchets</option>
+                {% for waste_type in waste_types %}
+                <option value="{{ waste_type.id }}">{{ waste_type.name }}</option>
+                {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-default">Générer</button>
+        <button type="button" onclick="generateStatistiques()" class="btn btn-default">Générer</button>
     </form>
 
     <br>
@@ -37,18 +37,76 @@
     <table id="notificationTable" class="table table-striped table-hover text-center">
         <thead>
             <tr>
-                <th class="text-center">Jour</th>
-                <th class="text-center">Nombre moyen de visite</th> <!--equal to what is selected in listbox-->
+                <th width="50%" id="tableFirstColumnHeader" class="text-center">Jour</th>
+                <th width="50%" id="tableSecondColumnHeader" class="text-center">Nombre moyen de visite</th> <!--equal to what is selected in listbox-->
             </tr>
         </thead>
-        <tbody>
+        <tbody id="bodyStatsTable">
 
-            <tr>
-                <th class="text-center">Jour</th>
-                <th class="text-center">Nombre moyen de visite</th>
-            </tr>
+        <tr>
+            <td>xxx</td>
+            <td>xxx</td>
+        </tr>
+        <tr>
+            <td>xxx</td>
+            <td>xxx</td>
+        </tr>
+        <tr>
+            <td>xxx</td>
+            <td>xxx</td>
+        </tr>
 
         </tbody>
     </table>
+
+    <script>
+        function changeVisiteAndVolumeSelect(){
+            var selected = $('#selectVisiteOrVolume').find(":selected");
+            if(selected.val() === "visite"){
+                $('#wasteTypeSelectDiv').css('display', 'none');
+            }else{
+                $('#wasteTypeSelectDiv').removeAttr("style");
+            }
+            $('#tableSecondColumnHeader').text(selected.text());
+        }
+
+        function changePeriodSelect(){
+            var selected = $('#selectPeriod').find(":selected");
+            $('#tableFirstColumnHeader').text(selected.text());
+        }
+
+        function generateStatistiques(){
+            var visiteOrVolume = $('#selectVisiteOrVolume').find(":selected").val();
+            var period = $('#selectPeriod').find(":selected").val();
+            var wasteType = $('#selectWasteType').find(":selected").val();
+            var url = "/statistiques/" + period + "/" + visiteOrVolume + "/" + wasteType + ""
+            alert(url);
+
+            $.ajax({
+                url: url,
+                method: "get"
+            }).done(function(msg){
+                refreshStatTable(msg);
+            });
+        }
+
+        function refreshStatTable(msg){
+            var tbody = '';
+            /*
+            $.each(JSON.parse(msg['data']), function(i, item){
+                tbody +=  "<tr class='text-center'>  \
+                                <td>" + hello + " </td> \
+                                <td>" + world + "</td> \
+                            </tr>";
+            });
+            */
+
+            if(tbody===''){
+                tbody += '<tr class="text-center"><td colspan=\"4\">Aucune statistiques disponibles !</td></tr>';
+            }
+
+            $('#bodyStatsTable').html(tbody);
+        }
+    </script>
 
 {% endblock %}

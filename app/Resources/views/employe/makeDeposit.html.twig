@@ -12,7 +12,6 @@
 <div class="row">
     <form class="form-inline text-center">
         <div class="form-group">
-            <label for="name">Nom</label>
             <input type="text" class="form-control" id="name" placeholder="John Doe">
         </div>
         <button type="button" onclick="searchHouseholds()" class="btn btn-primary">Rechercher</button>
@@ -45,13 +44,11 @@
 <div class="row">
     <form class="form-inline text-center">
         <div class="form-group">
-            <label for="wasteType">Type de déchet : </label>
             <select id="selectWasteType" class="form-control">
-                <option selected value="Encombrants">Encombrants</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+                <option selected disabled value="">Veuillez choisir un type de déchet</option>
+                {% for waste_type in waste_types %}
+                <option value="{{ waste_type.name }}">{{ waste_type.name }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="form-group">
@@ -142,11 +139,19 @@
             $('input:checkbox:checked').parents("tr").remove();
         }
 
+        function isWasteTableEmpty(){
+            return $('#wasteTable > tbody  > tr').length == 0;
+        }
         function validateDeposit(){
             userSelected = $('.danger #columnUsername').text();
 
-            if(userSelected === null){
-                alert('Veuillez choisir un utilisateur');
+            if(userSelected === ""){
+                $('#alertError').text('Veuillez choisir un ménage');
+                $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
+            }
+            else if(isWasteTableEmpty()){
+                $('#alertError').text('Aucun déchet encodé');
+                $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             }
             else{
                 var array = [];
@@ -164,9 +169,11 @@
                     data: JSON.stringify(array),
                     contentType: "application/json"
                 }).done(function(msg) {
+                    $('#alertSuccess').text(msg);
                     $('#alertSuccess').slideUp(300).fadeIn(400).delay(1500).fadeOut();
-                }).fail(function() {
-                    $('#alertError').slideUp(300).fadeIn(400).delay(1500).fadeOut();
+                }).fail(function(xhr, status, error) {
+                    $('#alertError').text(xhr.responseText);
+                    $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
                 });
 
             }
@@ -198,8 +205,6 @@
                         </tr>";
                 tbody = $('#bodyWasteTable').append(newLine);
             }
-
-
         }
 
         $(".wasteTable input[type=checkbox]").on("change", function() {
@@ -209,7 +214,7 @@
         });
 
         $('input[type=checkbox]').change(function () {
-            $(this).closest('tr').find('td').toggleClass('info', this.checked);
+            $(this).closest('tr').find('td').toggleClass('warning', this.checked);
         });
 
 
