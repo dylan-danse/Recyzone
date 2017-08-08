@@ -43,17 +43,8 @@
         </thead>
         <tbody id="bodyStatsTable">
 
-        <tr>
-            <td>xxx</td>
-            <td>xxx</td>
-        </tr>
-        <tr>
-            <td>xxx</td>
-            <td>xxx</td>
-        </tr>
-        <tr>
-            <td>xxx</td>
-            <td>xxx</td>
+        <tr class="text-center">
+            <td colspan="2">Veuillez faire une recherche pour afficher les statistiques</td>
         </tr>
 
         </tbody>
@@ -101,7 +92,7 @@
 
 
             if(tbody===''){
-                tbody += '<tr class="text-center"><td colspan=\"4\">Aucune statistiques disponibles !</td></tr>';
+                tbody += '<tr class="text-center"><td colspan=\"2\">Aucune statistiques disponibles !</td></tr>';
             }
 
             $('#bodyStatsTable').html(tbody);
