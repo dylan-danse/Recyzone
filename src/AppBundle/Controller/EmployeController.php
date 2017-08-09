@@ -141,7 +141,7 @@ class EmployeController extends Controller
         $temp = json_decode($request->getContent(), true);
         $total=0;
         foreach($temp as $item) {
-            $total += intval(substr($item['volume'],0,1));
+            $total += intval(substr($item['volume'],0,strlen($item['volume'])-2));
         }
         $responseCheck = $this->checkIfDepositIsAuthorized($userId, $total);
         if($responseCheck){
@@ -187,15 +187,16 @@ class EmployeController extends Controller
     }
 
     public function checkIfDepositIsAuthorized($userId, $total){
+        //check quota journalier
         if($total>4){
             return "Dépôts refusé ! Vous ne pouvez pas déposer plus de 4 m3 par jour";
         }
 
         $em = $this->getDoctrine()->getManager();
-        $query = $em->createQueryBuilder();
-        $now = new \DateTime();
 
         //check visite journalière
+        $query = $em->createQueryBuilder();
+        $now = new \DateTime();
         $query->select('d')
             ->from('AppBundle:Deposit', 'd')
             ->leftJoin('d.household','h')
@@ -210,11 +211,30 @@ class EmployeController extends Controller
             );
         $result = $query->getQuery()->getResult();
         if(count($result) > 0){
-            return "Dépôts refusé ! Vous avez déja effectué un dépôt aujourd'hui";
+            //return "Dépôts refusé ! Vous avez déja effectué un dépôt aujourd'hui";
         }
 
-        //check quota mensuel
-        //check quota journalier
+        //check quota hebdomadaire
+        $query = $em->createQueryBuilder();
+        $query->select('SUM(d.quantity) as total')
+            ->from('AppBundle:Deposit', 'd')
+            ->leftJoin('d.household','h')
+            ->where('h.id = ?1')
+            ->andWhere('YEAR(d.creationDate) = YEAR(?2)')
+            ->andWhere('WEEK(d.creationDate) = WEEK(?2)')
+            ->setParameters(
+                array(
+                    1 => $userId,
+                    2 => $now->format("Y-m-d")." 00:00:00"
+                )
+            );
+
+        $result = $query->getQuery()->getSingleResult();
+        $alreadyUsed = intval($result['total']);
+
+        if($alreadyUsed + $total > 15){
+            return "Dépôts refusé ! Vous ne pouvez pas déposer plus de 15 m3 par semaine (".$alreadyUsed." m3 déja utilisé)";
+        }
     }
 
     public function redirectIfNotEmploye(){
