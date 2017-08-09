@@ -35,6 +35,9 @@ class WasteType
      */
     private $annual_quota;
 
+    /** @ORM\OneToMany(targetEntity="Deposit", mappedBy="waste_type") */
+    private $deposits;
+
     /**
      * WasteType constructor.
      * @param string $name
@@ -44,6 +47,7 @@ class WasteType
     {
         $this->name = $name;
         $this->annual_quota = $annual_quota;
+        $this->deposits = new ArrayCollection();
     }
 
     /**
@@ -61,6 +65,7 @@ class WasteType
     {
         $this->annual_quota = $annual_quota;
     }
+
 
 
     /**
