@@ -163,8 +163,9 @@
                             user: 1
                         }
                 });
+                //TODO : urgent !! set the real user id
                 $.ajax({
-                    url: "./addWastes",
+                    url: "./addWastes/" + 1,
                     method: "post",
                     data: JSON.stringify(array),
                     contentType: "application/json"

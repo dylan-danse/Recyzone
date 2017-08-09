@@ -134,15 +134,25 @@ class EmployeController extends Controller
     }
 
     /**
-     * @Route("/addWastes", name="addWastes")
+     * @Route("/addWastes/{userId}", name="addWastes")
      */
-    public function addWastes(Request $request)
+    public function addWastes(Request $request, $userId)
     {
         $temp = json_decode($request->getContent(), true);
+        $total=0;
+        foreach($temp as $item) {
+            $total += intval(substr($item['volume'],0,1));
+        }
+        $responseCheck = $this->checkIfDepositIsAuthorized($userId, $total);
+        if($responseCheck){
+            return new Response($responseCheck,400);
+        }
+
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQueryBuilder();
+
         foreach($temp as $item){
-            $houseHold = $em->getRepository("AppBundle:User")->find($item['user']);
+            $houseHold = $em->getRepository("AppBundle:User")->find($userId);
             $wasteType = $em->getRepository("AppBundle:WasteType")->findOneBy(array('name' => $item['type']));
             $volume = substr($item['volume'],0,strlen($item['volume'])-2);
             $query->select('c')
@@ -174,6 +184,37 @@ class EmployeController extends Controller
             $em->flush();
         }
         return new JsonResponse("Dépôts effectué avec succès !", 200);
+    }
+
+    public function checkIfDepositIsAuthorized($userId, $total){
+        if($total>4){
+            return "Dépôts refusé ! Vous ne pouvez pas déposer plus de 4 m3 par jour";
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQueryBuilder();
+        $now = new \DateTime();
+
+        //check visite journalière
+        $query->select('d')
+            ->from('AppBundle:Deposit', 'd')
+            ->leftJoin('d.household','h')
+            ->where('h.id = ?1')
+            ->andWhere('d.creationDate BETWEEN ?2 AND ?3')
+            ->setParameters(
+                array(
+                    1 => $userId,
+                    2 => new \DateTime($now->format("Y-m-d")." 00:00:00"),
+                    3 => new \DateTime($now->format("Y-m-d")." 23:59:59")
+                )
+            );
+        $result = $query->getQuery()->getResult();
+        if(count($result) > 0){
+            return "Dépôts refusé ! Vous avez déja effectué un dépôt aujourd'hui";
+        }
+
+        //check quota mensuel
+        //check quota journalier
     }
 
     public function redirectIfNotEmploye(){
