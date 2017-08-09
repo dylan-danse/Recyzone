@@ -80,7 +80,12 @@
         });
 
         function generateTournee(){
-            alert("Pas à implémenter pour ce projet");
+            $.ajax({
+                url: "/generateTournee",
+                method: "get"
+            }).done(function(msg){
+                console.log(msg);
+            });
             //TODO : empty all the containers selected ?
         }
 

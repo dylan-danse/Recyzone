@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CEOController extends Controller
 {
@@ -28,6 +29,21 @@ class CEOController extends Controller
         return $this->render('ceo/index.html.twig',array(
             'containers' => $containers
         ));
+    }
+
+    /**
+     * @Route("/generateTournee", name="generateTournee")
+     */
+    public function emptyContainers(Request $request){
+        //not compulsory, so for now clean all container instead of only the selected ones
+        $this->redirectIfNotCEO();
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+        $query = $qb->update('AppBundle:Container', 'c')
+            ->set('c.usedVolume', '0')
+            ->getQuery();
+        $query->execute();
+        return new Response("Containers vidés avec succès ! (plz reload)",200);
     }
 
     public function redirectIfNotCEO(){

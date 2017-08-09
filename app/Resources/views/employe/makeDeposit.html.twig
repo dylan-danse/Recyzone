@@ -120,12 +120,13 @@
         function refreshUsersList(msg){
             var tbody = '';
             $.each(JSON.parse(msg['data']), function(i, item){
-               tbody +=  "<tr role='button' onclick='setSelectedUser(this)' class='text-center'> " +
-                            "<td>" + item.firstName + " " + item.lastName +" </td> \
+               tbody +=  "<tr role='button' onclick='setSelectedUser(this)' class='text-center'> \
+                            <td>" + item.firstName + " " + item.lastName +" </td> \
                             <td>" + item.houseNumber + " " + item.streetName + " - " + "code" + " " + item.city + "</td> \
                             <td>" + item.email + "</td> \
-                            <td id='columnUsername'>" + item.username + "</td> \ " +
-                        "</tr>";
+                            <td id='columnUsername'>" + item.username + "</td> \
+                            <td id='userId' hidden>" + item.id + "</td>\
+                        </tr>";
             });
 
             if(tbody===''){
@@ -144,6 +145,7 @@
         }
         function validateDeposit(){
             userSelected = $('.danger #columnUsername').text();
+            userIdSelected = $('.danger #userId').text();
 
             if(userSelected === ""){
                 $('#alertError').text('Veuillez choisir un ménage');
@@ -165,7 +167,7 @@
                 });
                 //TODO : urgent !! set the real user id
                 $.ajax({
-                    url: "./addWastes/" + 1,
+                    url: "./addWastes/" + userIdSelected,
                     method: "post",
                     data: JSON.stringify(array),
                     contentType: "application/json"
