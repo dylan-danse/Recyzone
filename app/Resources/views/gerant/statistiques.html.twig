@@ -80,12 +80,56 @@
             });
         }
 
+        function sqlToFrench($day){
+            switch ($day){
+                case 'Monday':
+                    return 'Lundi';
+                case 'Tuesday':
+                    return 'Mardi';
+                case 'Wednesday':
+                    return 'Mercredi';
+                case 'Thursday':
+                    return 'Jeudi';
+                case 'Friday':
+                    return 'Vendredi';
+                case 'Saturday':
+                    return 'Samedi';
+                case 'Sunday':
+                    return 'Dimanche';
+                case 'January':
+                    return 'Janvier';
+                case 'February':
+                    return 'Février';
+                case 'March':
+                    return 'Mars';
+                case 'April':
+                    return 'Avril';
+                case 'May':
+                    return 'Mai';
+                case 'June':
+                    return 'Juin';
+                case 'July':
+                    return 'Juillet';
+                case 'August':
+                    return 'Août';
+                case 'September':
+                    return 'Septembre';
+                case 'October':
+                    return 'Octobre';
+                case 'November':
+                    return 'Novembre';
+                case 'December':
+                    return 'Décembre';
+            }
+        }
+
+
         function refreshStatTable(msg){
             var tbody = '';
 
             $.each(JSON.parse(msg['data']), function(i, item){
                 tbody +=  "<tr class='text-center'>  \
-                                <td>" + item['key'] + " </td> \
+                                <td>" + sqlToFrench(item['key']) + " </td> \
                                 <td>" + item['value'] + "</td> \
                             </tr>";
             });
@@ -97,6 +141,8 @@
 
             $('#bodyStatsTable').html(tbody);
         }
+
+
     </script>
 
 {% endblock %}

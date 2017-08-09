@@ -240,5 +240,9 @@ class Park
     {
         return $this->city;
     }
+
+    public function getFullAdress(){
+        return $this->streetName." ".$this->houseNumber." - ".$this->postCode." ".$this->city;
+    }
 }
 

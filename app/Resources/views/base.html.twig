@@ -49,7 +49,7 @@
                     {% elseif app.user.role.name == "Ménage" %}
                         <li class="{% if app.request.attributes.get('_route') == 'factures' %}active{% endif %}"><a href="./factures">Factures</a></li>
                     {% elseif app.user.role.name == "CEO" %}
-                        <li class="{% if app.request.attributes.get('_route') == 'statistiquesGlobales' %}active{% endif %}"><a href="./statistiquesGlobales">Statistiques</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'statistiques' %}active{% endif %}"><a href="./statistiques">Statistiques</a></li>
                     {% endif %}
                 {% endif %}
 

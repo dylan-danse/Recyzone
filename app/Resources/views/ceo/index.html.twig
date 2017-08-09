@@ -9,8 +9,8 @@
     <table id="notificationTable" class="table table-striped table-hover text-center">
         <thead>
         <tr>
-            <th class="text-center">Conteneur</th>
             <th class="text-center">Parc</th>
+            <th class="text-center">Conteneur</th>
             <th class="text-center">Type de déchets</th>
             <th class="text-center">Volume</th>
             <th class="text-center">Remplissage</th>
@@ -20,8 +20,8 @@
         <tbody>
         {% for container in containers %}
             <tr>
+                <td>{{ container.park.FullAdress }}</td>
                 <td>{{ container.id }}</td>
-                <td>Adresse</td>
                 <td>{{ container.wasteType.name }}</td>
                 <td>{{ container.capacity }}</td>
                 <td>{% set percentage = container.usedVolume/container.capacity*100 %} {{ percentage }}%</td>
@@ -45,8 +45,8 @@
             $(this).closest('tr').find('td').toggleClass('danger', this.checked);
         });
 
-        function generateBill(){
-            alert("Pas à implémenter pour ce projet")
+        function generateTournee(){
+            alert("Pas à implémenter pour ce projet");
         }
 
         function generateBill(){

@@ -15,27 +15,18 @@ class CEOController extends Controller
     {
         $this->redirectIfNotCEO();
         $em = $this->getDoctrine()->getManager();
-        //TODO : ONLY TX DE REMPLISSQUE > 50
-        $query = $em->createQuery(
-            "select n from AppBundle\Entity\Container n left join n.park as p left join n.waste_type as w order by w.name ASC"
-        );
-        $query->setParameters(array(
-            //'parkID' => $this->getUser()->getPark()->getId()
-        ));
-        $containers = $query->getResult();
+        $query = $em->createQueryBuilder();
+
+        $query->select('c')
+            ->from('AppBundle:Container', 'c')
+            ->leftJoin('c.park','p')
+            ->leftJoin('c.waste_type','w')
+            ->where('(c.usedVolume/c.capacity*100) >= 75')
+            ->orderBy('c.usedVolume/c.capacity*100', 'DESC');
+
+        $containers = $query->getQuery()->getResult();
         return $this->render('ceo/index.html.twig',array(
             'containers' => $containers
-        ));
-    }
-
-    /**
-     * @Route("/statistiquesGlobales", name="statistiquesGlobales")
-     */
-    public function v(Request $request)
-    {
-        $this->redirectIfNotCEO();
-        return $this->render('gerant/statistiques.html.twig',array(
-
         ));
     }
 
