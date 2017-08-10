@@ -18,27 +18,26 @@ class MenageController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository(User::class)->find($this->getUser()->getId());
-        $query = $em->createQueryBuilder();
 
-        $query->select('w.name as type, d.quantity as deposed, 
-                        w.annual_quota + (w.annual_quota/100*h.correctionCoeff) as authorized, 
-                        w.annual_quota + (w.annual_quota/100*h.correctionCoeff)-d.quantity as remaining, 
-                        h.id')
-            ->from('AppBundle:WasteType', 'w')
-            ->leftJoin('w.deposits','d')
-            ->leftJoin('d.household','h')
-            ->where('h.id = ?1')
-            ->orderBy('w.name')
-            ->setParameters(array(
-                1 => $this->getUser()->getId()
-            ));
-        print_r($query->getQuery()->getResult());
-        //print_r($query->getQuery()->getSql());
-        $quotas = $query->getQuery()->getResult();
+        $sql = " 
+            SELECT w.name as type, 
+                    (SELECT volume FROM quota where waste_type_id = w.id) as total,
+                    (SELECT SUM(quantity) FROM deposit where waste_type_id = w.id) as deposed
+            FROM waste_type w
+            left JOIN deposit d on w.id = d.waste_type_id
+            left join fos_user u on u.id = d.household_id
+            left join quota q on u.id = q.user_id
+            GROUP BY w.id
+            ";
+
+        $em = $this->getDoctrine()->getManager();
+        $stmt = $em->getConnection()->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
 
         return $this->render('menage/index.html.twig',array(
             'user' => $user,
-            'quotas' => $quotas
+            'quotas' => $results
         ));
     }
 

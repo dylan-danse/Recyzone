@@ -4,8 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Deposit;
 use AppBundle\Entity\Notification;
+use AppBundle\Entity\Quota;
 use AppBundle\Entity\Role;
 use AppBundle\Entity\User;
+use AppBundle\Entity\WasteType;
 use function MongoDB\BSON\toJSON;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -85,6 +87,7 @@ class EmployeController extends Controller
             // TODO : replace with random password generation
 
             $userManager->updateUser($userAdmin);
+            $this->createQuotasFor($userAdmin);
 
             return $this->redirectToRoute('employe');
         }
@@ -184,6 +187,15 @@ class EmployeController extends Controller
             $em->flush();
         }
         return new JsonResponse("Dépôts effectué avec succès !", 200);
+    }
+
+    public function createQuotasFor($user){
+        $em = $this->getDoctrine()->getManager();
+        $wasteTypes = $em->getRepository(WasteType::class)->findAll();
+        foreach ($wasteTypes as $wasteType){
+            $em->persist(new Quota($wasteType->getAnnualQuota()/100*(100+$user->getCorrectionCoeff()),$user,$wasteType));
+        }
+        $em->flush();
     }
 
     public function checkIfDepositIsAuthorized($userId, $total){

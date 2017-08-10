@@ -22,30 +22,30 @@
             <thead>
             <tr>
                 <th>Type de déchet</th>
-                <th>Volume déposé</th>
-                <th>Volume autorisé</th>
-                <th>Reste</th>
+                <th class="text-center">Volume déposé</th>
+                <th class="text-center">Volume autorisé</th>
+                <th class="text-center">Reste</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Test</td>
-                <td>0 m3</td>
-                <td>10 m3</td>
-                <td>10 m3</td>
-            </tr>
-            <tr>
-                <td>Test</td>
-                <td>0 m3</td>
-                <td>10 m3</td>
-                <td>10 m3</td>
-            </tr>
-            <tr>
-                <td>Test</td>
-                <td>0 m3</td>
-                <td>10 m3</td>
-                <td>10 m3</td>
-            </tr>
+            {% for quota in quotas  %}
+                <tr>
+                    <td>{{ quota['type'] }}</td>
+                    {% if quota['deposed'] == null %}
+                        <td class="text-center">0 m3</td>
+                    {% else %}
+                        <td class="text-center">{{ quota['deposed'] }} m3</td>
+                    {% endif %}
+
+                    {% if quota['total'] == 0 %}
+                        <td class="text-center">/</td>
+                        <td class="text-center">/</td>
+                    {% else %}
+                        <td class="text-center">{{ quota['total'] }} m3</td>
+                        <td class="text-center">{% set remaining = quota['total'] - quota['deposed'] %}{{ remaining }} m3</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
