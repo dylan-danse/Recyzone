@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class EmployeController extends Controller
@@ -50,6 +51,12 @@ class EmployeController extends Controller
     {
         $this->redirectIfNotEmploye();
 
+        $em = $this->getDoctrine()->getManager();
+        $communes = $em->getRepository("AppBundle:Commune")->findAll();
+        $comm = array();
+        foreach ($communes as $commune){
+            $comm[$commune->getName()] = $commune->getName();
+        }
         $form = $this->createFormBuilder()
             ->add('firstname', TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('lastName', TextType::class, array('attr' => array('class' => 'form-control')))
@@ -57,10 +64,13 @@ class EmployeController extends Controller
             ->add('streetName', TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('houseNumber', TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('houseBox', TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('commune', TextType::class, array('attr' => array('class' => 'form-control')))//choiceType
-            ->add('city', TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('numberOfAdult', IntegerType::class, array('attr' => array('class' => 'form-control')))
-            ->add('numberOfChild', IntegerType::class, array('attr' => array('class' => 'form-control')))
+            ->add('commune', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control'),
+                'choices' => $comm
+            ))
+            ->add('city', ChoiceType::class, array('attr' => array('class' => 'form-control')))
+            ->add('numberOfAdult', IntegerType::class, array('attr' => array('class' => 'form-control', 'min' => '1', 'value' => 1)))
+            ->add('numberOfChild', IntegerType::class, array('attr' => array('class' => 'form-control', 'min' => '0', 'value' => 0)))
             ->add('save', SubmitType::class, array('label' => 'Create Household', 'attr' => array('class' => 'btn btn-primary')))
             ->getForm();
 
