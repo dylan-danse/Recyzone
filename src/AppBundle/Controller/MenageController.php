@@ -30,7 +30,6 @@ class MenageController extends Controller
             GROUP BY w.id
             ";
 
-        $em = $this->getDoctrine()->getManager();
         $stmt = $em->getConnection()->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll();
@@ -38,6 +37,19 @@ class MenageController extends Controller
         return $this->render('menage/index.html.twig',array(
             'user' => $user,
             'quotas' => $results
+        ));
+    }
+
+    /**
+     * @Route("/factures", name="factures")
+     */
+    public function factureAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $bills = $em->getRepository("AppBundle:Bill")->findBy(array("household" => $this->getUser()->getId()));
+
+        return $this->render('menage/factures.html.twig',array(
+            'bills' => $bills
         ));
     }
 

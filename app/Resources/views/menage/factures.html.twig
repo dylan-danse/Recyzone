@@ -4,4 +4,108 @@
 
 <h1 class="text-center">Factures</h1>
 
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Numéro</th>
+            <th>Date de création</th>
+            <th>Montant</th>
+            <th>Statut</th>
+            <th>Echéance</th>
+            <th>Détails</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for bill in bills %}
+        <tr>
+            <td>{{ bill.id }}</td>
+            <td>{{ bill.creationDate|date("d F Y") }}</td>
+            <td>{{ bill.amount }} &euro;</td>
+            <td>{{ bill.status }}</td>
+            {% if (bill.status == "Payé") %}
+                <td>-</td>
+            {% else %}
+                <td>{{ bill.endingDate|date("d F Y") }}</td>
+            {% endif %}
+            <td>
+                <i class="fa fa-th-list" aria-hidden="true" role="button" onclick="seeDetails({{ bill|json_encode() }})"
+                   data-toggle="tooltip" data-placement="right" title="Voir détails facture n°{{ bill.id }}"> </i>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div id="modalDetails" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-title">Détails facture n°<span id="id"></span> du <span id="creationDate"></span></h4>
+            </div>
+            <div class="modal-body">
+                <p>Statut : <span id="status"></span></p>
+                <table class="table table-striped table-hover text-center">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Type</th>
+                        <th class="text-center">Type déchet</th>
+                        <th class="text-center">Quantité</th>
+                        <th class="text-center">Montant</th>
+                    </tr>
+                    </thead>
+                    <tbody id="bodyDepositsTable">
+                    <tr>
+                        <td>aaa</td>
+                        <td>zzz</td>
+                        <td>eee</td>
+                        <td>rrr</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Total : <span id="amount"></span> &euro;</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function seeDetails(bill){
+        console.log(bill);
+        $('#id').text(bill['id']);
+        $('#creationDate').text(new Date(bill['creationDate']['date']).toLocaleDateString());
+        $('#status').text(bill['status']);
+        $('#amount').text(bill['amount']);
+        $('#modalDetails').modal('show');
+
+        var tbody = ''
+        /*
+        POUR CHAQUE DEPOT LIE A LA FACTURE
+        $.each(), function(i, item){
+            tbody +=  "<tr class='text-center'> \
+                            <td></td> \
+                            <td></td> \
+                            <td></td> \
+                            <td></td> \
+                        </tr>";
+        });
+*/
+        if(tbody===''){
+            tbody += '<tr class="text-center"><td colspan=\"4\">Aucune facture !</td></tr>';
+        }
+
+        $('#bodyDepositsTable').html(tbody);
+    }
+</script>
+
 {% endblock %}

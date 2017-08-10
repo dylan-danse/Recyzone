@@ -98,7 +98,7 @@ class User extends BaseUser implements \JsonSerializable
      */
     private $numberOfAdult;
 
-    /** @ORM\OneToMany(targetEntity="Quota", mappedBy="user_id") */
+    /** @ORM\OneToMany(targetEntity="Quota", mappedBy="household") */
     private $quotas;
 
     /**
