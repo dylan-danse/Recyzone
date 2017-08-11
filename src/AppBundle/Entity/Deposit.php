@@ -29,13 +29,6 @@ class Deposit
     private $quantity;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="amount_in_euros", type="float")
-     */
-    private $amountInEuros;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime")
@@ -64,22 +57,44 @@ class Deposit
     private $container;
 
     /**
+     * Many BillDetails have One Bill.
+     * @ORM\ManyToOne(targetEntity="BillDetails",cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="bill_details_id", referencedColumnName="id")
+     */
+    private $billDetails;
+
+    /**
+     * @return mixed
+     */
+    public function getBillDetails()
+    {
+        return $this->billDetails;
+    }
+
+    /**
+     * @param mixed $billDetails
+     */
+    public function setBillDetails($billDetails)
+    {
+        $this->billDetails = $billDetails;
+    }
+
+    /**
      * Deposit constructor.
      * @param float $quantity
-     * @param float $amountInEuros
      * @param \DateTime $creationDate
      * @param $waste_type
      * @param $household
      * @param $container
      */
-    public function __construct($quantity, $amountInEuros, \DateTime $creationDate, $waste_type, $household, $container)
+    public function __construct($quantity, \DateTime $creationDate, $waste_type, $household, $container, $billDetails)
     {
         $this->quantity = $quantity;
-        $this->amountInEuros = $amountInEuros;
         $this->creationDate = $creationDate;
         $this->waste_type = $waste_type;
         $this->household = $household;
         $this->container = $container;
+        $this->billDetails = $billDetails;
     }
 
     /**
@@ -163,30 +178,6 @@ class Deposit
     public function getQuantity()
     {
         return $this->quantity;
-    }
-
-    /**
-     * Set amountInEuros
-     *
-     * @param float $amountInEuros
-     *
-     * @return Deposit
-     */
-    public function setAmountInEuros($amountInEuros)
-    {
-        $this->amountInEuros = $amountInEuros;
-
-        return $this;
-    }
-
-    /**
-     * Get amountInEuros
-     *
-     * @return float
-     */
-    public function getAmountInEuros()
-    {
-        return $this->amountInEuros;
     }
 
     /**

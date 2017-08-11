@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\BillDetails;
 use AppBundle\Entity\Deposit;
 use AppBundle\Entity\Notification;
 use AppBundle\Entity\Quota;
@@ -214,7 +215,23 @@ class EmployeController extends Controller
             } catch (\Exception $ex){
                 return new Response("Dépôt impossible pour ".$volume."m3 (".$item['type'].") ! Aucun conteneur ne possède la capacité suffisante", 500);
             }
-            $em->persist(new Deposit($volume,0,new \DateTime("now"),$wasteType,$houseHold,$container));
+
+            $result = $this->checkIfQuotaIsExceeded($wasteType,$houseHold,$volume);
+            if ($result['total'] >= 0){
+                $billDetails = new BillDetails(0,0);
+            }else{
+                print_r($result);
+                $exceed = 100/$result['quota']*(-$result['quota']);
+                $forfait = $this->calculateForfait($wasteType, $exceed);
+                $variable = $this->calculateVariable($wasteType, $exceed)*0.25;
+                $billDetails = new BillDetails($forfait,$variable);
+            }
+            $em->persist($billDetails);
+
+            $deposit = new Deposit($volume,new \DateTime("now"),$wasteType,$houseHold,$container,$billDetails);
+            $em->persist($deposit);
+
+
             $container->setUsedVolume($container->getUsedVolume()+$volume);
             if($container->getCompletionPercentage() >= 80){
                 $em->persist(new Notification(new \DateTime("now"),"Conteneur".$container->getId()." rempli à ".$container->getCompletionPercentage()."%", false,$this->getUser()->getPark()));
@@ -222,6 +239,37 @@ class EmployeController extends Controller
             $em->flush();
         }
         return new JsonResponse("Dépôts effectué avec succès !", 200);
+    }
+
+    public function calculateForfait($wasteType, $exceed){
+        switch ($wasteType->getName()){
+            case "déchets de jardin":
+            case "bois":
+                return ($exceed <= 20) ? 10 : 20 ;
+            case "encombrants":
+                return ($exceed <= 20) ? 15 : 30 ;
+            case "briques et briquaillons":
+            case "terres et sables":
+                return ($exceed <= 20) ? 7.5 : 15 ;
+            default:
+                return 0;
+        }
+    }
+
+    public function calculateVariable($wasteType, $exceed){
+        switch ($wasteType->getName()){
+            case "déchets de jardin":
+                return ($exceed <= 20) ? 2.5 : 4 ;
+            case "encombrants":
+            case "bois":
+                return ($exceed <= 20) ? 4 : 4 ;
+            case "briques et briquaillons":
+            case "terres et sables":
+                return ($exceed <= 20) ? 3 : 5 ;
+            default:
+                return 0;
+                break;
+        }
     }
 
     public function createQuotasFor($user){
@@ -282,6 +330,24 @@ class EmployeController extends Controller
         if($alreadyUsed + $total > 15){
             return "Dépôts refusé ! Vous ne pouvez pas déposer plus de 15 m3 par semaine (".$alreadyUsed." m3 déja utilisé)";
         }
+    }
+
+    public function checkIfQuotaIsExceeded($wasteType,$houseHold,$volume){
+        $em = $this->getDoctrine()->getManager();
+
+        $sql = " 
+            select q.volume - SUM(d.quantity) - ".$volume." as total, q.volume as quota
+            from deposit d
+            left join waste_type w on w.id = d.waste_type_id
+            left join fos_user f on f.id = d.household_id
+            left join quota q on q.user_id = f.id
+            where f.id = ".$houseHold->getId()." AND q.waste_type_id = ".$wasteType->getId()." AND YEAR(d.creation_date)=YEAR(CURDATE())
+            ";
+        $stmt = $em->getConnection()->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetch();
+
+        return $results;
     }
 
     public function redirectIfNotEmploye(){
