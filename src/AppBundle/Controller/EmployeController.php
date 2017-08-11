@@ -112,7 +112,7 @@ class EmployeController extends Controller
             $city = ucfirst(mb_strtolower($form['city']->getData()));
             $numberOfAdult = $form['numberOfAdult']->getData();
             $numberOfChild = $form['numberOfChild']->getData();
-
+            //$postCode =
             $userManager = $this->container->get('fos_user.user_manager');
             $userAdmin = new User('random',$email,explode("@", $email, 2)[0],
                 $firstname,$lastName,$streetName,$houseNumber,$houseBox,$commune,$city,$numberOfChild,$numberOfAdult,
@@ -169,6 +169,7 @@ class EmployeController extends Controller
             }
             return new JsonResponse(array('data' => json_encode($usersFinal)));
         }
+
         return new Response("Erreur : Ce n'est pas une requête Ajax", 400);
     }
 
@@ -220,7 +221,6 @@ class EmployeController extends Controller
             if ($result['total'] >= 0){
                 $billDetails = new BillDetails(0,0);
             }else{
-                print_r($result);
                 $exceed = 100/$result['quota']*(-$result['quota']);
                 $forfait = $this->calculateForfait($wasteType, $exceed);
                 $variable = $this->calculateVariable($wasteType, $exceed)*0.25;

@@ -83,6 +83,46 @@ class User extends BaseUser implements \JsonSerializable
     private $city;
 
     /**
+     * @return string
+     */
+    public function getPostCode()
+    {
+        return $this->postCode;
+    }
+
+    /**
+     * @param string $postCode
+     */
+    public function setPostCode($postCode)
+    {
+        $this->postCode = $postCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuotas()
+    {
+        return $this->quotas;
+    }
+
+    /**
+     * @param mixed $quotas
+     */
+    public function setQuotas($quotas)
+    {
+        $this->quotas = $quotas;
+    }
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="post_code", type="string", length=255, nullable=true)
+     * )
+     */
+    private $postCode;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="numberOfChild", type="integer", nullable=true)
