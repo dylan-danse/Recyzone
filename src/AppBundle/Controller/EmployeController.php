@@ -54,9 +54,26 @@ class EmployeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $communes = $em->getRepository("AppBundle:Commune")->findAll();
         $comm = array();
+        $cities = [];
+        $cps = [];
+
         foreach ($communes as $commune){
             $comm[$commune->getName()] = $commune->getName();
+            $name = $this->str_to_noaccent($commune->getName());
+            $json = json_decode(file_get_contents('http://geoservices.wallonie.be/geolocalisation/rest/searchCommunes/'.$name));
+
+            foreach($json->communes[0]->cps as $code){
+                $cps[$code] = $commune->getName();;
+            }
         }
+
+        foreach ($cps as $key => $value){
+            $json = json_decode(file_get_contents('http://geoservices.wallonie.be/geolocalisation/rest/getListeLocalitesByCp/'.$key));
+            foreach ($json->localites as $locality){
+                $cities[$value][$key] = $locality->nom;
+            }
+        }
+
         $form = $this->createFormBuilder()
             ->add('firstname', TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('lastName', TextType::class, array('attr' => array('class' => 'form-control')))
@@ -68,7 +85,13 @@ class EmployeController extends Controller
                 'attr' => array('class' => 'form-control'),
                 'choices' => $comm
             ))
-            ->add('city', ChoiceType::class, array('attr' => array('class' => 'form-control')))
+            ->add('city', ChoiceType::class, array(
+                'attr' => array('class' => 'form-control'),
+                'choices' => $cities,
+                'choice_label' => function($category, $key, $index) {
+                    return $key." - ".ucfirst(mb_strtolower($category));
+                }
+            ))
             ->add('numberOfAdult', IntegerType::class, array('attr' => array('class' => 'form-control', 'min' => '1', 'value' => 1)))
             ->add('numberOfChild', IntegerType::class, array('attr' => array('class' => 'form-control', 'min' => '0', 'value' => 0)))
             ->add('save', SubmitType::class, array('label' => 'Create Household', 'attr' => array('class' => 'btn btn-primary')))
@@ -85,7 +108,7 @@ class EmployeController extends Controller
             $houseNumber = $form['houseNumber']->getData();
             $houseBox = $form['houseBox']->getData();
             $commune = $form['commune']->getData();
-            $city = $form['city']->getData();
+            $city = ucfirst(mb_strtolower($form['city']->getData()));
             $numberOfAdult = $form['numberOfAdult']->getData();
             $numberOfChild = $form['numberOfChild']->getData();
 
@@ -99,7 +122,9 @@ class EmployeController extends Controller
             $userManager->updateUser($userAdmin);
             $this->createQuotasFor($userAdmin);
 
-            return $this->redirectToRoute('employe');
+            return $this->render('divers/userAdded.html.twig', array(
+                'user' => $userAdmin
+            ));
         }
 
         return $this->render('employe/addHousehold.html.twig', array(
@@ -298,5 +323,26 @@ class EmployeController extends Controller
                 }
                 break;
         }
+    }
+
+    function str_to_noaccent($str)
+    {
+        $url = $str;
+        $url = preg_replace('#Ç#', 'C', $url);
+        $url = preg_replace('#ç#', 'c', $url);
+        $url = preg_replace('#è|é|ê|ë#', 'e', $url);
+        $url = preg_replace('#È|É|Ê|Ë#', 'E', $url);
+        $url = preg_replace('#à|á|â|ã|ä|å#', 'a', $url);
+        $url = preg_replace('#@|À|Á|Â|Ã|Ä|Å#', 'A', $url);
+        $url = preg_replace('#ì|í|î|ï#', 'i', $url);
+        $url = preg_replace('#Ì|Í|Î|Ï#', 'I', $url);
+        $url = preg_replace('#ð|ò|ó|ô|õ|ö#', 'o', $url);
+        $url = preg_replace('#Ò|Ó|Ô|Õ|Ö#', 'O', $url);
+        $url = preg_replace('#ù|ú|û|ü#', 'u', $url);
+        $url = preg_replace('#Ù|Ú|Û|Ü#', 'U', $url);
+        $url = preg_replace('#ý|ÿ#', 'y', $url);
+        $url = preg_replace('#Ý#', 'Y', $url);
+
+        return ($url);
     }
 }

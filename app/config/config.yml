@@ -83,6 +83,8 @@ fos_user:
     registration:
         form:
             type: AppBundle\Form\RegistrationType
+        confirmation:
+            enabled: true
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
