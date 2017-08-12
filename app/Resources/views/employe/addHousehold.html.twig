@@ -93,16 +93,17 @@
 
     $("#form_commune").change(function() {
         listSelect = [];
-        //loadSelectOptions();
+        loadSelectOptions();
     });
 
     $(document).ajaxStop(function () {
         $('#form_city').find('option').remove();
         Object.keys(listSelect).forEach(function(element){
             $('#form_city').append($("<option></option>")
-                                        .attr("value",element)
+                                        .attr("value",listSelect[element])
                                         .text(listSelect[element]));
         });
+        $('#form_city').prop('disabled', false);
     });
 
     String.prototype.capitalize = function() {
@@ -110,6 +111,7 @@
     }
 
     function loadSelectOptions(){
+        $('#form_city').prop('disabled', true);
         $.ajax({
             type: 'GET',
             url: 'http://geoservices.wallonie.be/geolocalisation/rest/searchCommunes/' + $("#form_commune" ).val()
@@ -121,7 +123,7 @@
                     url: 'http://geoservices.wallonie.be/geolocalisation/rest/getListeLocalitesByCp/' + element
                 }).done(function(msg) {
                     msg['localites'].forEach(function(element) {
-                        listSelect[element['nom']] = element['cps'][0] + " - " + element['nom'].toLowerCase().capitalize();
+                        listSelect[element['nom']] = element['cps'][0] + " : " + element['nom'].toLowerCase().capitalize();
                     });
                 });
             });

@@ -23,6 +23,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+
 
 class EmployeController extends Controller
 {
@@ -71,9 +73,11 @@ class EmployeController extends Controller
         foreach ($cps as $key => $value){
             $json = json_decode(file_get_contents('http://geoservices.wallonie.be/geolocalisation/rest/getListeLocalitesByCp/'.$key));
             foreach ($json->localites as $locality){
-                $cities[$value][$key] = $locality->nom;
+                array_push($cities,$key." : ".ucfirst(mb_strtolower($locality->nom)));
             }
         }
+
+
 
         $form = $this->createFormBuilder()
             ->add('firstname', TextType::class, array('attr' => array('class' => 'form-control')))
@@ -89,8 +93,8 @@ class EmployeController extends Controller
             ->add('city', ChoiceType::class, array(
                 'attr' => array('class' => 'form-control'),
                 'choices' => $cities,
-                'choice_label' => function($category, $key, $index) {
-                    return $key." - ".ucfirst(mb_strtolower($category));
+                'choice_label' => function($category) {
+                    return $category;
                 }
             ))
             ->add('numberOfAdult', IntegerType::class, array('attr' => array('class' => 'form-control', 'min' => '1', 'value' => 1)))
@@ -109,13 +113,15 @@ class EmployeController extends Controller
             $houseNumber = $form['houseNumber']->getData();
             $houseBox = $form['houseBox']->getData();
             $commune = $form['commune']->getData();
-            $city = ucfirst(mb_strtolower($form['city']->getData()));
+            $temp = explode(':',$form['city']->getData());
+            $postCode = trim($temp[0]);
+            $city = trim($temp[1]);
             $numberOfAdult = $form['numberOfAdult']->getData();
             $numberOfChild = $form['numberOfChild']->getData();
-            //$postCode =
+
             $userManager = $this->container->get('fos_user.user_manager');
             $userAdmin = new User('random',$email,explode("@", $email, 2)[0],
-                $firstname,$lastName,$streetName,$houseNumber,$houseBox,$commune,$city,$numberOfChild,$numberOfAdult,
+                $firstname,$lastName,$streetName,$houseNumber,$houseBox,$commune,$city,$postCode,$numberOfChild,$numberOfAdult,
                 $this->getDoctrine()->getRepository("AppBundle:Role")->findOneByName(array("Ménage")),
                 $this->getUser()->getPark());
             // TODO : replace with random password generation

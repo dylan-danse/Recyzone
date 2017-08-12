@@ -164,7 +164,7 @@ class User extends BaseUser implements \JsonSerializable
      * @param string $correctionCoeff
      * @param $role
      */
-    public function __construct($password,$email,$username,$firstName, $lastName, $streetName, $houseNumber, $houseBox, $commune, $city, $numberOfChild, $numberOfAdult, $role, $park)
+    public function __construct($password,$email,$username,$firstName, $lastName, $streetName, $houseNumber, $houseBox, $commune, $city, $postCode, $numberOfChild, $numberOfAdult, $role, $park)
     {
         $this->setPlainPassword($password);
         $this->setEmail($email);
@@ -178,6 +178,7 @@ class User extends BaseUser implements \JsonSerializable
         $this->houseBox = $houseBox;
         $this->commune = $commune;
         $this->city = $city;
+        $this->postCode = $postCode;
         $this->numberOfChild = $numberOfChild;
         $this->numberOfAdult = $numberOfAdult;
         $this->setRole($role);
