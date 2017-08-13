@@ -455,6 +455,19 @@ class User extends BaseUser implements \JsonSerializable
     }
 
     /**
+     * @Assert\IsTrue(message = "Ce nom d'utilisateur est déja pris")
+     */
+    public function hasUniqueUserName($listUsername){
+        return false;
+        foreach ($listUsername as $username){
+            if($this->username === $username){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,

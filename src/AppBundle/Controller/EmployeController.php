@@ -24,6 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Form\FormError;
 
 
 class EmployeController extends Controller
@@ -98,18 +100,48 @@ class EmployeController extends Controller
                     return $category;
                 }
             ))
-            ->add('numberOfAdult', IntegerType::class, array('attr' => array('class' => 'form-control', 'min' => '1', 'value' => 1)))
-            ->add('numberOfChild', IntegerType::class, array('attr' => array('class' => 'form-control', 'min' => '0', 'value' => 0)))
+            ->add('numberOfAdult', IntegerType::class, array(
+                'constraints' => [
+                    new Range(
+                        [
+                            'min' => 1,
+                            'minMessage' => "Le nombre d'adulte ne peut pas être moins de {{ limit }}"
+                        ]
+                    )
+                ],
+                'attr' => array('class' => 'form-control',  'value' => 1))
+            )
+            ->add('numberOfChild', IntegerType::class, array(
+                    'constraints' => [
+                        new Range(
+                            [
+                                'min' => 0,
+                                'minMessage' => "Le nombre d'enfants ne peut pas être moins de {{ limit }}"
+                            ]
+                        )
+                    ],
+                    'attr' => array('class' => 'form-control',  'value' => 0))
+            )
             ->add('save', SubmitType::class, array('label' => 'Create Household', 'attr' => array('class' => 'btn btn-primary')))
             ->getForm();
 
         $form->handleRequest($request);
 
+        $email = $form['email']->getData();
+        $username = explode("@", $email, 2)[0];
+
+        $alreadyTaken = $em->getRepository("AppBundle:User")->findBy(array('username' => $username));
+        if(count($alreadyTaken) > 0){
+            $form->get('email')->addError(new FormError('Ce nom d\'utilisateur est déja utilisé'));
+            return $this->render('employe/addHousehold.html.twig', array(
+                'form' => $form->createView()
+            ));
+        }
+
         if ($form->isSubmitted() && $form->isValid()){
 
             $firstname = $form['firstname']->getData();
             $lastName = $form['lastName']->getData();
-            $email = $form['email']->getData();
             $streetName = $form['streetName']->getData();
             $houseNumber = $form['houseNumber']->getData();
             $houseBox = $form['houseBox']->getData();
@@ -121,7 +153,7 @@ class EmployeController extends Controller
             $numberOfChild = $form['numberOfChild']->getData();
 
             $userManager = $this->container->get('fos_user.user_manager');
-            $userAdmin = new User('random',$email,explode("@", $email, 2)[0],
+            $userAdmin = new User('random',$email,$username,
                 $firstname,$lastName,$streetName,$houseNumber,$houseBox,$commune,$city,$postCode,$numberOfChild,$numberOfAdult,
                 $this->getDoctrine()->getRepository("AppBundle:Role")->findOneByName(array("Ménage")),
                 $this->getUser()->getPark());

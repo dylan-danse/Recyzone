@@ -11,6 +11,7 @@
             {{ form_label(form.firstname,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-10">
                 {{ form_widget(form.firstname, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.firstname) }}
             </div>
         </div>
 
@@ -18,6 +19,7 @@
             {{ form_label(form.lastName,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-10">
                 {{ form_widget(form.lastName, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.lastName) }}
             </div>
         </div>
 
@@ -25,6 +27,7 @@
             {{ form_label(form.email,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-10">
                 {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.email) }}
             </div>
         </div>
 
@@ -32,11 +35,13 @@
             {{ form_label(form.numberOfAdult,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-4">
                 {{ form_widget(form.numberOfAdult, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.numberOfAdult) }}
             </div>
 
             {{ form_label(form.numberOfChild,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-4">
                 {{ form_widget(form.numberOfChild, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.numberOfChild) }}
             </div>
         </div>
 
@@ -46,6 +51,7 @@
             {{ form_label(form.commune,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-10">
                 {{ form_widget(form.commune, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.commune) }}
             </div>
         </div>
 
@@ -53,6 +59,7 @@
             {{ form_label(form.city,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-10">
                 {{ form_widget(form.city, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.city) }}
             </div>
         </div>
 
@@ -60,6 +67,7 @@
             {{ form_label(form.streetName,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-10">
                 {{ form_widget(form.streetName, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.streetName) }}
             </div>
         </div>
 
@@ -67,11 +75,13 @@
             {{ form_label(form.houseNumber,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-4">
                 {{ form_widget(form.houseNumber, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.houseNumber) }}
             </div>
 
             {{ form_label(form.houseBox,null, { 'label_attr': {'class': 'col-sm-2 control-label'} }) }}
             <div class="col-sm-4">
                 {{ form_widget(form.houseBox, { 'attr': {'class': 'form-control'} }) }}
+                {{ form_errors(form.houseBox) }}
             </div>
         </div>
 
@@ -111,5 +121,11 @@
     }
 
 </script>
+
+<style>
+    label.required:before {
+        content: "* ";
+    }
+</style>
 
 {% endblock %}
