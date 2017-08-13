@@ -44,7 +44,7 @@ class Notification
 
     /**
      * Many notification have One park.
-     * @ORM\ManyToOne(targetEntity="Park")
+     * @ORM\ManyToOne(targetEntity="Park",inversedBy="notifications")
      * @ORM\JoinColumn(name="park_id", referencedColumnName="id")
      */
     private $park;

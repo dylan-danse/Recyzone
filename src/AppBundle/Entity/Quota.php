@@ -30,7 +30,7 @@ class Quota
 
     /**
      * Many quotas have One user.
-     * @ORM\ManyToOne(targetEntity="User",cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="User",cascade={"persist", "remove"},inversedBy="quotas")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;

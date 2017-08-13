@@ -80,7 +80,7 @@ class Park
      */
     private $commune;
 
-    /** @ORM\OneToMany(targetEntity="Notification", mappedBy="notification") */
+    /** @ORM\OneToMany(targetEntity="Notification", mappedBy="park") */
     private $notifications;
 
     /**
