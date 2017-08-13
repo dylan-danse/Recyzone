@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<br>
+<br>
+
+<table id="usersTable" class="table table-striped table-hover text-center">
+    <thead>
+    <tr>
+        <th class="text-center">Id</th>
+        <th class="text-center">Nom</th>
+        <th class="text-center">Email</th>
+        <th class="text-center">Derniere conexion</th>
+        <th class="text-center" width="20%">Rôle</th>
+        <th class="text-center" width="5%">Sauvegarder</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr id="user{{ user.id }}">
+            <td>{{ user.id }}</td>
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.lastLogin|date('Y-m-d H:i:s') }}</td>
+            <td>
+                <select class="form-control" name="selectRole" id="selectRole">
+                    {% for role in roles %}
+                        {% if role.name == user.role.name %}
+                            <option value="{{ role.id }}" selected>{{ role.name }}</option>
+                        {% else %}
+                            <option value="{{ role.id }}" >{{ role.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </td>
+            <td role="button" onclick="updateRole({{ user.id }})" >
+                <i class="fa fa-floppy-o"aria-hidden="true"></i>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<br>
+
+
+<div class="row">
+    <div hidden id="alertSuccess" class="alert alert-success alert-dismissible text-center" role="alert">
+    </div>
+    <div hidden id="alertError" class="alert alert-danger text-center" role="alert">
+    </div>
+</div>
+
+    <script>
+
+        $( document ).ready(function() {
+            console.log( "ready!" );
+            $('#usersTable').DataTable();
+        });
+
+        function updateRole(userid){
+            var role = $("#user" + userid + " option:selected" ).val();
+
+            $.ajax({
+                url: "./updateRole/"+userid+"/"+role,
+                method: "post"
+            }).done(function(msg){
+                $('#alertSuccess').text(msg);
+                $('#alertSuccess').slideUp(300).fadeIn(400).delay(1500).fadeOut();
+            }).fail(function(xhr, status, error) {
+                $('#alertError').text("Une erreur s'est produit...");
+                $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
+            });
+        }
+
+    </script>
+
+{% endblock %}

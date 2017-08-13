@@ -2,8 +2,6 @@
 
 {% block body %}
 
-<h1>Notifications</h1>
-
 <br>
 <br>
 
@@ -16,19 +14,28 @@
     </tr>
     </thead>
     <tbody>
-    {% for notification in notifications %}
+    {% if notifications  %}
+        {% for notification in notifications %}
+            <tr>
+                <td>{{ notification.creationDate|date("Y-m-d H:i:s")}}</td>
+                <td>{{ notification.description }}</td>
+                <td><input type="checkbox"><input id="notificationId" type="hidden" value="{{ notification.id }}"></td>
+            </tr>
+        {% endfor %}
+    {% else %}
         <tr>
-            <td>{{ notification.creationDate|date("Y-m-d H:i:s")}}</td>
-            <td>{{ notification.description }}</td>
-            <td><input type="checkbox"><input id="notificationId" type="hidden" value="{{ notification.id }}"></td>
+            <td colspan="3">Aucune notifications</td>
         </tr>
-    {% endfor %}
+    {% endif %}
     </tbody>
+    {% if notifications  %}
     <tfoot>
     <tr>
         <td colspan="3" align="right"><button onclick="deleteSelectedRows()" class="btn btn-danger pull-right">Clôturer</button></td>
     </tr>
     </tfoot>
+    {% endif %}
+
 </table>
 
 

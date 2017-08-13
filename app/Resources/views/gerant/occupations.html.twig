@@ -41,23 +41,6 @@
         $(this).closest('tr').find('td').toggleClass('danger', this.checked);
     });
 
-    function deleteSelectedRows(){
-        /*var param = [];
-        var rows = $('input:checkbox:checked').parents("tr");
-
-        $.each(rows, function(i, item){
-            param.push($(item).find('#notificationId').val());
-        });
-
-        $.ajax({
-            url: "./archiveNotifications",
-            method: "post",
-            data: {id: JSON.stringify(param)},
-        }).done(function(msg){
-            rows.remove();
-            console.log(msg);
-        });*/
-    }
 </script>
 
 

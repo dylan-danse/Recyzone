@@ -220,7 +220,7 @@ class EmployeController extends Controller
         $temp = json_decode($request->getContent(), true);
         $total=0;
         foreach($temp as $item) {
-            $total += intval(substr($item['volume'],0,strlen($item['volume'])-2));
+            $total += intval($item['volume']);
         }
         $responseCheck = $this->checkIfDepositIsAuthorized($userId, $total);
         if($responseCheck){
@@ -233,7 +233,7 @@ class EmployeController extends Controller
         foreach($temp as $item){
             $houseHold = $em->getRepository("AppBundle:User")->find($userId);
             $wasteType = $em->getRepository("AppBundle:WasteType")->findOneBy(array('name' => $item['type']));
-            $volume = substr($item['volume'],0,strlen($item['volume'])-2);
+            $volume = $item['volume'];
             $query->select('c')
                 ->from('AppBundle:Container', 'c')
                 ->leftJoin('c.park', 'p')
@@ -382,6 +382,7 @@ class EmployeController extends Controller
             left join quota q on q.user_id = f.id
             where f.id = ".$houseHold->getId()." AND q.waste_type_id = ".$wasteType->getId()." AND YEAR(d.creation_date)=YEAR(CURDATE())
             ";
+
         $stmt = $em->getConnection()->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetch();

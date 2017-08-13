@@ -72,7 +72,6 @@
             <tr>
                 <th class="text-center">Type de déchet</th>
                 <th class="text-center">Volume</th>
-                <th class="text-center">Quota annuel utilisé</th>
                 <th class="text-center">Selection</th>
             </tr>
         </thead>
@@ -161,11 +160,9 @@
                     array[array.length] =
                         {
                             type:$(this).find("#wasteType").text(),
-                            volume: $(this).find("#wasteVolume").text(),
-                            user: 1
+                            volume: $(this).find("#wasteVolume span").text()
                         }
                 });
-                //TODO : urgent !! set the real user id
                 $.ajax({
                     url: "./addWastes/" + userIdSelected,
                     method: "post",
@@ -196,17 +193,30 @@
 
             if(wasteType === "" ||wasteVolume === ""){
                 alert("Veuillez entrer toute les informations nécessaires !");
-                //TODO : show error details ?
             }
             else{
-                //tbody = $('#bodyWasteTable').html();
-                newLine = "<tr class=\"text-center\"> \
+                var td = $('#bodyWasteTable #wasteType');
+                var updated = false;
+                if(td.length > 0){
+                    td.each(function(){
+                        if($(this).html() === wasteType){
+                            var value = $(this).parent().find('span').each(function(){
+                                var current = parseInt($(this).text());
+                                var toAdd = parseInt(wasteVolume);
+                                $(this).text(current + toAdd) ;
+                            });
+                            updated = true;
+                        }
+                    });
+                }
+                if(!updated){
+                    newLine = "<tr class=\"text-center\"> \
                             <td id=\"wasteType\">" + wasteType + "</td> \
-                            <td id=\"wasteVolume\">" + wasteVolume + "m3</td> \
-                            <td id=\"quota\">" + 10 + "%</td> \
+                            <td id=\"wasteVolume\"><span id='" + wasteType + " volume'>" + wasteVolume + "</span>m3</td> \
                             <td><input type=\"checkbox\"></td> \
                         </tr>";
-                tbody = $('#bodyWasteTable').append(newLine);
+                    tbody = $('#bodyWasteTable').append(newLine);
+                }
             }
         }
 

@@ -81,12 +81,51 @@ class GerantController extends Controller
     {
         $this->redirectIfNotGerant();
 
-        $em = $this->getDoctrine();
+        $em = $this->getDoctrine()->getManager();
         $wasteTypes = $em->getRepository('AppBundle:WasteType')->findAll();
 
         return $this->render('gerant/statistiques.html.twig',array(
             'waste_types' => $wasteTypes
         ));
+    }
+
+    /**
+     * @Route("/manage", name="manage")
+     */
+    public function manage(Request $request)
+    {
+        $this->redirectIfNotGerant();
+
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQueryBuilder();
+
+        $query->select('u')
+            ->from('AppBundle:User', 'u')
+            ->leftJoin('u.park', 'p')
+            ->where(($this->getUser()->getRole()->getName() === "CEO")?'0=0':'p.id = '.$this->getUser()->getPark()->getId()
+            );
+        $users = $query->getQuery()->getResult();
+
+        $roles = $em->getRepository("AppBundle:Role")->findAll();
+
+        return $this->render('gerant/manage.html.twig',array(
+            'users' => $users,
+            'roles' => $roles
+        ));
+    }
+
+    /**
+     * @Route("/updateRole/{userId}/{roleId}", name="updateRole")
+     */
+    public function updateRole($userId, $roleId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository("AppBundle:User")->find($userId);
+        $role = $em->getRepository("AppBundle:Role")->find($roleId);
+        $user->setRole($role);
+        $em->flush();
+
+        return new JsonResponse("Rôle de ".$user->getFirstName()." ".$user->getLastName()." mis à jour avec succès (".$role->getName().")", 200);
     }
 
     /**

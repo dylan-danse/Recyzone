@@ -20,8 +20,8 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-Xqcy5ttufkC3rBa8EdiAyA1VgOGrmel2Y+wxm4K3kI3fcjTWlDWrlnxyD6hOi3PF" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+ENW/yibaokMnme+vBLnHMphUYxHs34h9lpdbSLuAwGkOKFRl4C34WkjazBtb7eT" crossorigin="anonymous">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
 </head>
 
@@ -47,10 +47,12 @@
                     {% elseif app.user.role.name == "Gérant" %}
                         <li class="{% if app.request.attributes.get('_route') == 'statistiques' %}active{% endif %}"><a href="./statistiques">Statistiques</a></li>
                         <li class="{% if app.request.attributes.get('_route') == 'occupations' %}active{% endif %}"><a href="./occupations">Occupations</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'manage' %}active{% endif %}"><a href="./manage">Gèrer utilisateurs</a></li>
                     {% elseif app.user.role.name == "Ménage" %}
                         <li class="{% if app.request.attributes.get('_route') == 'factures' %}active{% endif %}"><a href="./factures">Factures</a></li>
                     {% elseif app.user.role.name == "CEO" %}
                         <li class="{% if app.request.attributes.get('_route') == 'statistiques' %}active{% endif %}"><a href="./statistiques">Statistiques</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'manage' %}active{% endif %}"><a href="./manage">Gèrer utilisateurs</a></li>
                     {% endif %}
                 {% endif %}
 
