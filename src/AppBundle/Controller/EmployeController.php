@@ -71,13 +71,14 @@ class EmployeController extends Controller
         }
 
         foreach ($cps as $key => $value){
+            if(!isset($cities[$value])){
+                $cities[$value] = [];
+            }
             $json = json_decode(file_get_contents('http://geoservices.wallonie.be/geolocalisation/rest/getListeLocalitesByCp/'.$key));
             foreach ($json->localites as $locality){
-                array_push($cities,$key." : ".ucfirst(mb_strtolower($locality->nom)));
+                array_push($cities[$value],$key." : ".ucfirst(mb_strtolower($locality->nom)));
             }
         }
-
-
 
         $form = $this->createFormBuilder()
             ->add('firstname', TextType::class, array('attr' => array('class' => 'form-control')))
