@@ -1,9 +1,8 @@
-# This file is auto-generated during the composer install
 parameters:
-    database_host: 192.168.100.13
+    database_host: 192.168.128.13
     database_port: null
     database_name: in14b1037
-    database_user: in14b1037
+    database_user: in14b1037@localhost
     database_password: 3083
     mailer_transport: smtp
     mailer_host: 127.0.0.1

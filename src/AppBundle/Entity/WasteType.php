@@ -33,7 +33,7 @@ class WasteType
     /**
      * @var string
      *
-     * @ORM\Column(name="annual_quota", type="integer")
+     * @ORM\Column(name="annual_quota", type="integer, nullable=true")
      */
     private $annual_quota;
 

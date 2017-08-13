@@ -77,8 +77,8 @@ class DefaultController extends Controller
         $BOIS = new WasteType('bois',3);
         $BRIQUE = new WasteType('briques et briquaillons',2.5);
         $TERRE = new WasteType('terres et sables',2.5);
-        $METAUX = new WasteType('métaux','');
-        $PAPIER = new WasteType('papiers et cartons','');
+        $METAUX = new WasteType('métaux',null);
+        $PAPIER = new WasteType('papiers et cartons',null);
 
         $CONTAINER1 = new Container('50',0,$JARDIN,$PARK1);
         $CONTAINER2 = new Container('40',0,$JARDIN,$PARK1);
@@ -208,37 +208,36 @@ class DefaultController extends Controller
                     'dylan','d.danse@recyzone.be','dylan',
                     'Dylan', 'Danse',
                     '','','','','',
-                    '','', $EMPLOYE, $PARK1)
+                    '',0,0, $EMPLOYE, $PARK1)
             );
 
             $userManager->updateUser(new User(
                     'azerty','g.herant@recyzone.be','gherant',
                     'Guillaume', 'Hérant',
                     '','','','','',
-                    '','', $CEO, $PARK1)
+                    '',0,0, $CEO, $PARK1)
             );
 
             /* PARK 1 */
-
             $userManager->updateUser(new User(
                     'azerty','l.joiris@recyzone.be','ljoiris',
                     'Joiris', 'Luc',
                     '','','','','',
-                    '','', $GERANT, $PARK1)
+                    '',0,0, $GERANT, $PARK1)
             );
 
             $userManager->updateUser(new User(
                     'azerty','g.turbal@recyzone.be','gturbal',
                     'Turbal', 'Guy',
                     '','','','','',
-                    '','', $EMPLOYE, $PARK1)
+                    '',0,0, $EMPLOYE, $PARK1)
             );
 
             $userManager->updateUser(new User(
                     'azerty','j.doe@recyzone.be','jdoe',
                     'John', 'Doe',
                     '','','','','',
-                    '','', $EMPLOYE, $PARK1)
+                    '',0,0, $EMPLOYE, $PARK1)
             );
 
             /* PARK 2 */
@@ -304,6 +303,7 @@ class DefaultController extends Controller
             $em->persist($CONTAINER27);
             $em->persist($CONTAINER28);
             $em->persist($CONTAINER29);
+            $em->persist($CONTAINER30);
             $em->persist($CONTAINER31);
             $em->persist($CONTAINER32);
             $em->persist($CONTAINER33);

@@ -14,12 +14,18 @@
         </tr>
     </thead>
     <tbody>
+    {% if notifications  %}
         {% for notification in notifications %}
         <tr>
             <td>{{ notification.creationDate|date("Y-m-d H:i:s")}}</td>
             <td>{{ notification.description }}</td>
         </tr>
         {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="2">Aucune notifications</td>
+        </tr>
+    {% endif %}
     </tbody>
 </table>
 
