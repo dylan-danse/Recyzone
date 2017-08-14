@@ -56,6 +56,43 @@ class Bill implements \JsonSerializable
      */
     private $household;
 
+    /** @ORM\OneToMany(targetEntity="BillDetails", mappedBy="bill") */
+    private $billDetails;
+
+    /**
+     * @return mixed
+     */
+    public function getBillDetails()
+    {
+        return $this->billDetails;
+    }
+
+    /**
+     * @param mixed $billDetails
+     */
+    public function setBillDetails($billDetails)
+    {
+        $this->billDetails = $billDetails;
+    }
+
+    /**
+     * Bill constructor.
+     * @param \DateTime $creationDate
+     * @param \DateTime $endingDate
+     * @param float $amount
+     * @param string $status
+     * @param $household
+     */
+    public function __construct(\DateTime $creationDate, \DateTime $endingDate, $amount, $status, $household)
+    {
+        $this->creationDate = $creationDate;
+        $this->endingDate = $endingDate;
+        $this->amount = $amount;
+        $this->status = $status;
+        $this->household = $household;
+        $this->billDetails = [];
+    }
+
     /**
      * @return mixed
      */

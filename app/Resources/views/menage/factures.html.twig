@@ -81,30 +81,40 @@
 
 <script>
     function seeDetails(bill){
-        console.log(bill);
         $('#id').text(bill['id']);
         $('#creationDate').text(new Date(bill['creationDate']['date']).toLocaleDateString());
         $('#status').text(bill['status']);
         $('#amount').text(bill['amount']);
-        $('#modalDetails').modal('show');
 
-        var tbody = ''
-        /*
-        POUR CHAQUE DEPOT LIE A LA FACTURE
-        $.each(), function(i, item){
-            tbody +=  "<tr class='text-center'> \
-                            <td></td> \
-                            <td></td> \
-                            <td></td> \
-                            <td></td> \
-                        </tr>";
+
+        $.ajax({
+            url: "./billdetails/"+bill.id,
+            method: "get",
+        }).done(function(msg){
+            var tbody = '';
+            $.each(JSON.parse(msg['data']), function(i, item){
+
+                tbody +=  "<tr class='text-center'> \
+                        <td>Variable</td> \
+                        <td></td> \
+                        <td></td> \
+                        <td>" + item.variable + "</td> \
+                    </tr>";
+
+                tbody +=  "<tr class='text-center'> \
+                        <td>Forfait</td> \
+                        <td></td> \
+                        <td></td> \
+                        <td>" + item.forfait + "</td> \
+                    </tr>";
+
+                if(tbody===''){
+                    tbody += '<tr class="text-center"><td colspan="4">Aucun détails pour cette facture !</td></tr>';
+                }
+            });
+            $('#bodyDepositsTable').html(tbody);
+            $('#modalDetails').modal('show');
         });
-*/
-        if(tbody===''){
-            tbody += '<tr class="text-center"><td colspan=\"4\">Aucune facture !</td></tr>';
-        }
-
-        $('#bodyDepositsTable').html(tbody);
     }
 </script>
 

@@ -98,17 +98,37 @@
             }).done(function(msg){
                 console.log(msg);
             });
-            //TODO : empty all the containers selected ?
         }
 
         function generateBill(){
-            $('#modalBill').modal('show');
             $.ajax({
-                url: "",
+                url: "/generateBills",
                 method: "get"
             }).done(function(msg){
-                console.log(msg);
+                updateModalBillsInfos(msg);
+                $('#modalBill').modal('show');
             });
+        }
+
+        function updateModalBillsInfos(msg){
+            /*var tbody = '';*/
+            $.each(JSON.parse(msg['data']), function(i, item){
+                /*tbody +=  "<tr role='button' onclick='setSelectedUser(this)' class='text-center'> \
+                            <td>" + item.firstName + " " + item.lastName +" </td> \
+                            <td>" + item.houseNumber + " " + item.streetName + " - " + "code" + " " + item.city + "</td> \
+                            <td>" + item.email + "</td> \
+                            <td id='columnUsername'>" + item.username + "</td> \
+                            <td id='userId' hidden>" + item.id + "</td>\
+                        </tr>";*/
+                console.log(item);
+            });
+/*
+            if(tbody===''){
+                tbody += '<tr class="text-center"><td colspan=\"4\">Aucun utilisateur correspondant au critère !</td></tr>';
+            }
+
+            $('#bodyUsersTable').html(tbody);*/
+
         }
     </script>
 
