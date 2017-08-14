@@ -49,6 +49,14 @@
 
         </tbody>
     </table>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <div hidden id="alertSuccess" class="alert alert-success alert-dismissible text-center" role="alert"></div>
+        <div hidden id="alertError" class="alert alert-danger text-center" role="alert"></div>
+        <div hidden id="alertWarning" class="alert alert-warning text-center" role="alert"></div>
+    </div>
 
     <script>
 
@@ -76,12 +84,18 @@
             var period = $('#selectPeriod').find(":selected").val();
             var wasteType = $('#selectWasteType').find(":selected").val();
             var url = "/statistiques/" + period + "/" + visiteOrVolume + "/" + wasteType + ""
-
+            $('#alertWarning').text('Wait...');
+            $('#alertWarning').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             $.ajax({
                 url: url,
                 method: "get"
             }).done(function(msg){
+                $('#alertSuccess').text('Statistiques récupérées avec succès !');
+                $('#alertSuccess').slideUp(300).fadeIn(400).delay(2500).fadeOut();
                 refreshStatTable(msg);
+            }).fail(function(){
+                $('#alertError').text('Une erreur s\'est produite...');
+                $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             });
         }
 
