@@ -3,7 +3,7 @@
 {% block body %}
 
 <div class="col-md-offset-1 col-md-10">
-<h1>Encodage déchets</h1>
+<h1 class="text-center">Encodage déchets</h1>
 
     <br>
     <br>
@@ -33,6 +33,9 @@
             </tr>
         </thead>
         <tbody id="bodyUsersTable">
+            <tr>
+                <td class="text-center" colspan="4">Aucun ménage</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -76,6 +79,7 @@
             </tr>
         </thead>
         <tbody id="bodyWasteTable">
+
         </tbody>
     </table>
     <div class="col-md-offset-4 col-md-4">
@@ -95,6 +99,8 @@
     <div hidden id="alertError" class="alert alert-danger text-center" role="alert">
         Dépôt refusé...
     </div>
+    <div hidden id="alertWarning" class="alert alert-warning text-center" role="alert">
+    </div>
 </div>
 
 </div>
@@ -105,6 +111,7 @@
     -->
 
     <script>
+
         function searchHouseholds() {
             var param = document.getElementById('name').value
             $.ajax({
@@ -142,6 +149,7 @@
         function isWasteTableEmpty(){
             return $('#wasteTable > tbody  > tr').length == 0;
         }
+
         function validateDeposit(){
             userSelected = $('.danger #columnUsername').text();
             userIdSelected = $('.danger #userId').text();
@@ -163,6 +171,8 @@
                             volume: $(this).find("#wasteVolume span").text()
                         }
                 });
+                $('#alertWarning').text('Wait...');
+                $('#alertWarning').slideUp(300).fadeIn(400).delay(2500).fadeOut();
                 $.ajax({
                     url: "./addWastes/" + userIdSelected,
                     method: "post",
@@ -192,7 +202,8 @@
             wasteVolume = $("#inputWasteVolume").val();
 
             if(wasteType === "" ||wasteVolume === ""){
-                alert("Veuillez entrer toute les informations nécessaires !");
+                $('#alertError').text('Veuillez entrer toute les informations nécessaires !');
+                $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             }
             else{
                 var td = $('#bodyWasteTable #wasteType');
@@ -218,22 +229,12 @@
                     tbody = $('#bodyWasteTable').append(newLine);
                 }
             }
+
+            $('input[type=checkbox]').change(function () {
+                console.log('here');
+                $(this).closest('tr').find('td').toggleClass('danger', this.checked);
+            });
         }
-
-        $(".wasteTable input[type=checkbox]").on("change", function() {
-            $(this).closest("tr").toggleClass("warning");
-        }).filter(":checked").each(function() {
-            $(this).closest("tr").addClass("warning");
-        });
-
-        $('input[type=checkbox]').change(function () {
-            $(this).closest('tr').find('td').toggleClass('warning', this.checked);
-        });
-
-
-        /*$(document).ready(function(){
-            $('#usersTable').DataTable();
-        });*/
 
     </script>
 

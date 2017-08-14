@@ -7,7 +7,7 @@
 <br>
 <br>
 
-<table id="notificationTable" class="table table-striped table-hover text-center">
+<table id="containerTable" class="table table-striped table-hover text-center">
     <thead>
     <tr>
         <th class="text-center">Conteneur</th>
@@ -37,6 +37,10 @@
 
 
 <script>
+    $( document ).ready(function() {
+        $('#containerTable').DataTable();
+    });
+
     $('input[type=checkbox]').change(function () {
         $(this).closest('tr').find('td').toggleClass('danger', this.checked);
     });

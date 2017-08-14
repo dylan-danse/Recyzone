@@ -11,7 +11,7 @@
         <th class="text-center">Id</th>
         <th class="text-center">Nom</th>
         <th class="text-center">Email</th>
-        <th class="text-center">Derniere conexion</th>
+        <th class="text-center">Derniere connexion</th>
         <th class="text-center" width="20%">Rôle</th>
         <th class="text-center" width="5%">Sauvegarder</th>
     </tr>
@@ -51,18 +51,20 @@
     </div>
     <div hidden id="alertError" class="alert alert-danger text-center" role="alert">
     </div>
+    <div hidden id="alertInfo" class="alert alert-info text-center" role="alert">
+    </div>
 </div>
 
     <script>
 
         $( document ).ready(function() {
-            console.log( "ready!" );
             $('#usersTable').DataTable();
         });
 
         function updateRole(userid){
             var role = $("#user" + userid + " option:selected" ).val();
-
+            $('#alertInfo').text("Wait...");
+            $('#alertInfo').slideUp(300).fadeIn(400).delay(1500).fadeOut();
             $.ajax({
                 url: "./updateRole/"+userid+"/"+role,
                 method: "post"

@@ -60,6 +60,7 @@ class DefaultController extends Controller
         $GERANT = new Role('Gérant');
         $EMPLOYE = new Role('Employé');
         $MENAGE = new Role('Ménage');
+        $SYSADMIN = new Role('SysAdmin');
 
         $PARK1 = new Park('04/221.23.56','Rue du Péry','14','4000','Liège', $LIEGE);
         $PARK2 = new Park('04/220.53.49','Avenue de l\'Avenir','45','4020','Wandre', $LIEGE);
@@ -208,7 +209,7 @@ class DefaultController extends Controller
                     'dylan','d.danse@recyzone.be','dylan',
                     'Dylan', 'Danse',
                     '','','','','',
-                    '',0,0, $EMPLOYE, $PARK1)
+                    '',0,0, $SYSADMIN, $PARK1)
             );
 
             $userManager->updateUser(new User(
@@ -241,8 +242,16 @@ class DefaultController extends Controller
             );
 
             /* PARK 2 */
+
+            $userManager->updateUser(new User(
+                    'azerty','m.janlet@recyzone.be','mjanlet',
+                    'Myriam', 'Janlet',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK2)
+            );
+
+
 /*
-            - Janlet, Myriam, m.janlet@recyzone.be, mjanlet, azerty ,2, gérant
             - Hurot, Martin, m.hurot@recyzone.be, mhurot, azerty ,2, employé
             - Bichat, Pauline, p.bichat@recyzone.be, pbichat, azerty ,2, employé
             - Dutour, Sophie, s.dutour@recyzone.be, sdutour, azerty ,3, gérant

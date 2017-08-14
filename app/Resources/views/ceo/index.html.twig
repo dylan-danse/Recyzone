@@ -6,7 +6,7 @@
     <br>
     <br>
 
-    <table id="notificationTable" class="table table-striped table-hover text-center">
+    <table id="containerTable" class="table table-striped table-hover text-center">
         <thead>
         <tr>
             <th class="text-center">Parc</th>
@@ -18,26 +18,33 @@
         </tr>
         </thead>
         <tbody>
-        {% for container in containers %}
+        {% if containers %}
+            {% for container in containers %}
+                <tr>
+                    <td>{{ container.park.FullAdress }}</td>
+                    <td>{{ container.id }}</td>
+                    <td>{{ container.wasteType.name }}</td>
+                    <td>{{ container.capacity }}</td>
+                    <td>{% set percentage = container.usedVolume/container.capacity*100 %} {{ percentage }}%</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+            {% endfor %}
+        {% else %}
             <tr>
-                <td>{{ container.park.FullAdress }}</td>
-                <td>{{ container.id }}</td>
-                <td>{{ container.wasteType.name }}</td>
-                <td>{{ container.capacity }}</td>
-                <td>{% set percentage = container.usedVolume/container.capacity*100 %} {{ percentage }}%</td>
-                <td><input type="checkbox"></td>
+                <td colspan="6">Aucun container a afficher</td>
             </tr>
-        {% endfor %}
+        {% endif %}
         </tbody>
         <tfoot>
         <tr>
             <td colspan="6" align="center"><button onclick="generateTournee()" class="btn btn-danger pull-right">Générer tournée</button></td>
         </tr>
-        <tr>
-            <td colspan="6" align="center"><button onclick="generateBill()" class="btn btn-danger pull-right">Générer factures</button></td>
-        </tr>
         </tfoot>
     </table>
+
+    <br>
+    <br>
+    <button onclick="generateBill()" class="btn btn-block btn-primary pull-right">Générer factures</button>
 
     <div id="modalBill" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -75,6 +82,11 @@
 
 
     <script>
+
+        $( document ).ready(function() {
+            $('#containerTable').DataTable();
+        });
+
         $('input[type=checkbox]').change(function () {
             $(this).closest('tr').find('td').toggleClass('danger', this.checked);
         });
