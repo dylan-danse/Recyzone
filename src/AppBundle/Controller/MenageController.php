@@ -18,7 +18,7 @@ class MenageController extends Controller
         $this->redirectIfNotHousehold();
 
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository(User::class)->find($this->getUser()->getId());
+        $user = $em->getRepository("AppBundle:User")->find($this->getUser()->getId());
 
         $sql = " 
             SELECT w.name as type, 

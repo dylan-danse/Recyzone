@@ -37,14 +37,10 @@ class DefaultController extends Controller
                     return $this->redirect('./error');
             }
         }
-        // replace this example code with whatever you need
-        /*return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-        ]);*/
     }
 
     /**
-     * @Route("/DB", name="db")
+     * @Route("/db", name="db")
      */
     public function addDefaultValueInDatabase(){
 
@@ -60,7 +56,6 @@ class DefaultController extends Controller
         $GERANT = new Role('Gérant');
         $EMPLOYE = new Role('Employé');
         $MENAGE = new Role('Ménage');
-        $SYSADMIN = new Role('SysAdmin');
 
         $PARK1 = new Park('04/221.23.56','Rue du Péry','14','4000','Liège', $LIEGE);
         $PARK2 = new Park('04/220.53.49','Avenue de l\'Avenir','45','4020','Wandre', $LIEGE);
@@ -208,8 +203,8 @@ class DefaultController extends Controller
             $userManager->updateUser(new User(
                     'dylan','d.danse@recyzone.be','dylan',
                     'Dylan', 'Danse',
-                    '','','','','',
-                    '',0,0, $SYSADMIN, $PARK1)
+                    'Rue Louis Jamme','47','','Liège','Liège',
+                    '4020',0,1, $CEO, $PARK1)
             );
 
             $userManager->updateUser(new User(
@@ -250,28 +245,146 @@ class DefaultController extends Controller
                     '',0,0, $GERANT, $PARK2)
             );
 
+            $userManager->updateUser(new User(
+                    'azerty','m.hurot@recyzone.be','mhurot',
+                    'Martin', 'Hurot',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK2)
+            );
 
-/*
-            - Hurot, Martin, m.hurot@recyzone.be, mhurot, azerty ,2, employé
-            - Bichat, Pauline, p.bichat@recyzone.be, pbichat, azerty ,2, employé
-            - Dutour, Sophie, s.dutour@recyzone.be, sdutour, azerty ,3, gérant
-            - Janlet, Marc, ma.janlet@recyzone.be, majanlet, azerty ,3, employé
-            - Brasson, Guillaume, g.brasson@recyzone.be, gbrasson, azerty ,3, employé
-            - Oligat, Marc, m.oligat@recyzone.be, moligat, azerty ,4, gérant
-            - Krupper, Mario, m.krupper@recyzone.be, mkrupper, azerty ,4, employé
-            - Vandeberg, Pierre, p.vandeberg@recyzone.be, pvandeberg, azerty ,5, gérant
-            - Sitro, Maria, m.sitro@recyzone.be, msitro, azerty ,5, employé
-            - Jaminet, Paul, p.jaminet@recyzone.be, pjaminet, azerty ,6, gérant
-            - Bryon, Sylvie, s.bryon@recyzone.be, sbryon, azerty ,6, employé
-            - Lacasse, Martine, m.lacasse@recyzone.be, mlacasse, azerty ,7, gérant
-            - Paulus, Sergio, s.paulus@recyzone.be, spaulus, azerty ,7, employé
-            - Drion, Brigitte, b.drion@recyzone.be, bdrion, azerty ,8, gérant
-            - Demoulin, Serge, s.demoulin@recyzone.be, sdemoulin, azerty ,8, employé
-            - Duchamp, Pierre, p.duchamp@recyzone.be, pduchamp, azerty ,9, gérant
-            - Franzi, Marc, m.franzi@recyzone.be, mfranzi, azerty ,9, employé
-            - Douagou, Marceline, m.douagou@recyzone.be, mdouagou, azerty ,10, gérant
-            - Duroux, Nathalie, n.duroux@recyzone.be, nduroux, azerty ,10, employé
-*/
+            $userManager->updateUser(new User(
+                    'azerty','p.bichat@recyzone.be','pbichat',
+                    'Pauline', 'Bichat',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK2)
+            );
+
+            /* PARK 3 */
+            $userManager->updateUser(new User(
+                    'azerty','s.dutour@recyzone.be','sdutour',
+                    'Sophie', 'Dutour',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK3)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','ma.janlet@recyzone.be','majanlet',
+                    'Marc', 'Janlet',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK3)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','g.brasson@recyzone.be','gbrasson',
+                    'Guillaume', 'Brasson',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK3)
+            );
+
+            /* PARK 4 */
+            $userManager->updateUser(new User(
+                    'azerty','m.oligat@recyzone.be','moligat',
+                    'Marc', 'Oligat',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK4)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','m.krupper@recyzone.be','mkrupper',
+                    'Mario', 'Krupper',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK4)
+            );
+
+            /* PARK 5 */
+            $userManager->updateUser(new User(
+                    'azerty','p.vandeberg@recyzone.be','pvandeberg',
+                    'Pierre', 'Vandeberg',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK5)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','m.sitro@recyzone.be','msitro',
+                    'Maria', 'Sitro',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK5)
+            );
+
+            /* PARK 6 */
+            $userManager->updateUser(new User(
+                    'azerty','p.jaminet@recyzone.be','pjaminet',
+                    'Paul', 'Jaminet',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK6)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','s.bryon@recyzone.be','sbryon',
+                    'Sylvie', 'Bryon',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK6)
+            );
+
+            /* PARK 7 */
+            $userManager->updateUser(new User(
+                    'azerty','m.lacasse@recyzone.be','mlacasse',
+                    'Martine', 'Lacasse',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK7)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','s.paulus@recyzone.be','spaulus',
+                    'Sergio', 'Paulus',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK7)
+            );
+
+            /* PARK 8 */
+            $userManager->updateUser(new User(
+                    'azerty','b.drion@recyzone.be','bdrion',
+                    'Brigitte', 'Drion',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK8)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','s.demoulin@recyzone.be','sdemoulin',
+                    'Serge', 'Demoulin',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK8)
+            );
+
+            /* PARK 9 */
+            $userManager->updateUser(new User(
+                    'azerty','p.duchamp@recyzone.be','pduchamp',
+                    'Pierre', 'Duchamp',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK9)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','m.franzi@recyzone.be','mfranzi',
+                    'Marc', 'Franzi',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK9)
+            );
+
+            /* PARK 10 */
+            $userManager->updateUser(new User(
+                    'azerty','m.douagou@recyzone.be','mdouagou',
+                    'Marceline', 'Douagou',
+                    '','','','','',
+                    '',0,0, $GERANT, $PARK10)
+            );
+
+            $userManager->updateUser(new User(
+                    'azerty','n.duroux@recyzone.be','nduroux',
+                    'Nathalie', 'Duroux',
+                    '','','','','',
+                    '',0,0, $EMPLOYE, $PARK10)
+            );
         }
         if(count($this->getDoctrine()->getRepository('AppBundle:WasteType')->findAll()) === 0){
             $em->persist($JARDIN);
