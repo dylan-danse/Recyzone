@@ -42,20 +42,20 @@
                 <ul class="nav navbar-nav">
                 {% if app.user != null %}
                     {% if app.user.role.name == "Employé" %}
-                        <li class="{% if app.request.attributes.get('_route') == 'addHousehold' %}active{% endif %}"><a href="./addHousehold">Ajouter ménage</a></li>
-                        <li class="{% if app.request.attributes.get('_route') == 'makeDeposit' %}active{% endif %}"><a href="./makeDeposit">Ajouter dépôt</a></li>
-                        <li class="{% if app.request.attributes.get('_route') == 'depositsHistory' %}active{% endif %}"><a href="./depositsHistory">Historique Dépôts</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'addHousehold' %}active{% endif %}"><a href="./addHousehold">Add Household</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'makeDeposit' %}active{% endif %}"><a href="./makeDeposit">Add Deposit</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'depositsHistory' %}active{% endif %}"><a href="./depositsHistory">Deposits History</a></li>
                     {% elseif app.user.role.name == "Gérant" %}
-                        <li class="{% if app.request.attributes.get('_route') == 'statistiques' %}active{% endif %}"><a href="./statistiques">Statistiques</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'statistiques' %}active{% endif %}"><a href="./statistiques">Statistics</a></li>
                         <li class="{% if app.request.attributes.get('_route') == 'occupations' %}active{% endif %}"><a href="./occupations">Occupations</a></li>
-                        <li class="{% if app.request.attributes.get('_route') == 'manage' %}active{% endif %}"><a href="./manage">Gèrer utilisateurs</a></li>
-                        <li class="{% if app.request.attributes.get('_route') == 'depositsHistory' %}active{% endif %}"><a href="./depositsHistory">Historique Dépôts</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'manage' %}active{% endif %}"><a href="./manage">Manage Users</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'depositsHistory' %}active{% endif %}"><a href="./depositsHistory">Deposits History</a></li>
                     {% elseif app.user.role.name == "Ménage" %}
-                        <li class="{% if app.request.attributes.get('_route') == 'factures' %}active{% endif %}"><a href="./factures">Factures</a></li>
-                        <li class="{% if app.request.attributes.get('_route') == 'deposits' %}active{% endif %}"><a href="./deposits">Historique Dépôts</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'factures' %}active{% endif %}"><a href="./factures">Bills</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'deposits' %}active{% endif %}"><a href="./deposits">Deposits History</a></li>
                     {% elseif app.user.role.name == "CEO" %}
-                        <li class="{% if app.request.attributes.get('_route') == 'statistiques' %}active{% endif %}"><a href="./statistiques">Statistiques</a></li>
-                        <li class="{% if app.request.attributes.get('_route') == 'manage' %}active{% endif %}"><a href="./manage">Gèrer utilisateurs</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'statistiques' %}active{% endif %}"><a href="./statistiques">Statistics</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'manage' %}active{% endif %}"><a href="./manage">Manage Users</a></li>
                     {% endif %}
                 {% endif %}
 

@@ -9,11 +9,11 @@
     <thead>
     <tr>
         <th class="text-center">Id</th>
-        <th class="text-center">Nom</th>
-        <th class="text-center">Email</th>
-        <th class="text-center">Derniere connexion</th>
-        <th class="text-center" width="20%">Rôle</th>
-        <th class="text-center" width="5%">Sauvegarder</th>
+        <th class="text-center">Full Name</th>
+        <th class="text-center">Mail</th>
+        <th class="text-center">Last login</th>
+        <th class="text-center" width="20%">Role</th>
+        <th class="text-center" width="5%">Save</th>
     </tr>
     </thead>
     <tbody>
@@ -72,7 +72,7 @@
                 $('#alertSuccess').text(msg);
                 $('#alertSuccess').slideUp(300).fadeIn(400).delay(1500).fadeOut();
             }).fail(function(xhr, status, error) {
-                $('#alertError').text("Une erreur s'est produit...");
+                $('#alertError').text("An error occured...");
                 $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             });
         }

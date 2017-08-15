@@ -10,25 +10,25 @@
     <form class="form-inline text-center">
         <div class="form-group">
             <select id="selectPeriod" class="form-control" onchange="changePeriodSelect()">
-                <option selected value="journalier">Journalier</option>
-                <option value="mensuel">Mensuel</option>
+                <option selected value="journalier">Daily</option>
+                <option value="mensuel">Monthly</option>
             </select>
         </div>
         <div class="form-group">
             <select id="selectVisiteOrVolume" class="form-control" onchange="changeVisiteAndVolumeSelect()">
-                <option selected value="visite">Nombre moyen de visite</option>
-                <option value="volume">Moyenne des volumes de déchets</option>
+                <option selected value="visite">Average number of visits</option>
+                <option value="volume">Average waste volume</option>
             </select>
         </div>
         <div id="wasteTypeSelectDiv" style="display: none;" class="form-group">
             <select id="selectWasteType" class="form-control">
-                <option selected disabled value="0">Tous les déchets</option>
+                <option selected disabled value="0">All wastes</option>
                 {% for waste_type in waste_types %}
                 <option value="{{ waste_type.id }}">{{ waste_type.name }}</option>
                 {% endfor %}
             </select>
         </div>
-        <button type="button" onclick="generateStatistiques()" class="btn btn-primary">Générer</button>
+        <button type="button" onclick="generateStatistiques()" class="btn btn-primary">Show</button>
     </form>
 
     <br>
@@ -37,14 +37,14 @@
     <table id="statsTable" class="table table-striped table-hover text-center">
         <thead>
             <tr>
-                <th width="50%" id="tableFirstColumnHeader" class="text-center">Jour</th>
-                <th width="50%" id="tableSecondColumnHeader" class="text-center">Nombre moyen de visite</th> <!--equal to what is selected in listbox-->
+                <th width="50%" id="tableFirstColumnHeader" class="text-center">Day</th>
+                <th width="50%" id="tableSecondColumnHeader" class="text-center">Average number of visits</th> <!--equal to what is selected in listbox-->
             </tr>
         </thead>
         <tbody id="bodyStatsTable">
 
         <tr class="text-center">
-            <td colspan="2">Veuillez faire une recherche pour afficher les statistiques</td>
+            <td colspan="2">Make a research to display statistics</td>
         </tr>
 
         </tbody>
@@ -90,11 +90,11 @@
                 url: url,
                 method: "get"
             }).done(function(msg){
-                $('#alertSuccess').text('Statistiques récupérées avec succès !');
+                $('#alertSuccess').text('Statistics fetched with succes !');
                 $('#alertSuccess').slideUp(300).fadeIn(400).delay(2500).fadeOut();
                 refreshStatTable(msg);
             }).fail(function(){
-                $('#alertError').text('Une erreur s\'est produite...');
+                $('#alertError').text('An error occured...');
                 $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             });
         }
@@ -148,7 +148,7 @@
 
             $.each(JSON.parse(msg['data']), function(i, item){
                 tbody +=  "<tr class='text-center'>  \
-                                <td>" + sqlToFrench(item['key']) + " </td> \
+                                <td>" + item['key'] + " </td> \
                                 <td>" + item['value'] + "</td> \
                             </tr>";
             });

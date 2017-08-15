@@ -30,7 +30,7 @@
     </tbody>
     <tfoot>
     <tr>
-        <td colspan="5" align="right"><button onclick="deleteSelectedRows()" class="btn btn-danger pull-right">Clôturer</button></td>
+        <td colspan="5" align="right"><button onclick="CloseContainer()" class="btn btn-danger pull-right">Clôturer</button></td>
     </tr>
     </tfoot>
 </table>
@@ -44,6 +44,10 @@
     $('input[type=checkbox]').change(function () {
         $(this).closest('tr').find('td').toggleClass('danger', this.checked);
     });
+
+    function CloseContainer(){
+        alert("Not implemented for this project");
+    }
 
 </script>
 

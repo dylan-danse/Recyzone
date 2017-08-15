@@ -14,7 +14,7 @@
         <div class="form-group">
             <input type="text" class="form-control" id="name" placeholder="John Doe">
         </div>
-        <button type="button" onclick="searchHouseholds()" class="btn btn-primary">Rechercher</button>
+        <button type="button" onclick="searchHouseholds()" class="btn btn-primary">Search</button>
     </form>
 </div>
 
@@ -26,15 +26,15 @@
     <table id="usersTable" class="table table-striped table-hover">
         <thead>
             <tr>
-                <th class="text-center">Nom</th>
-                <th class="text-center">Adresse</th>
-                <th class="text-center">Email</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Address</th>
+                <th class="text-center">Mail</th>
                 <th class="text-center">Username</th>
             </tr>
         </thead>
         <tbody id="bodyUsersTable">
             <tr>
-                <td class="text-center" colspan="4">Aucun ménage</td>
+                <td class="text-center" colspan="4">No household</td>
             </tr>
         </tbody>
     </table>
@@ -48,7 +48,7 @@
     <form class="form-inline text-center">
         <div class="form-group">
             <select id="selectWasteType" class="form-control">
-                <option selected disabled value="">Veuillez choisir un type de déchet</option>
+                <option selected disabled value="">Please select a waste type</option>
                 {% for waste_type in waste_types %}
                 <option value="{{ waste_type.name }}">{{ waste_type.name }}</option>
                 {% endfor %}
@@ -57,11 +57,11 @@
         <div class="form-group">
 
             <div class="input-group">
-                <input type="number" class="form-control" id="inputWasteVolume" placeholder="0">
-                <span class="input-group-addon">m3</span>
+                <input min="0" type="number" class="form-control" id="inputWasteVolume" placeholder="0">
+                <span class="input-group-addon">m³</span>
             </div>
         </div>
-        <button type="button" onclick="addWaste()" class="btn btn-primary">Ajouter</button>
+        <button type="button" onclick="addWaste()" class="btn btn-primary">Add</button>
     </form>
 </div>
 
@@ -73,9 +73,9 @@
     <table id="wasteTable" class="table table-striped table-hover">
         <thead>
             <tr>
-                <th class="text-center">Type de déchet</th>
+                <th class="text-center">Waste Type</th>
                 <th class="text-center">Volume</th>
-                <th class="text-center">Selection</th>
+                <th class="text-center">Select</th>
             </tr>
         </thead>
         <tbody id="bodyWasteTable">
@@ -83,8 +83,8 @@
         </tbody>
     </table>
     <div class="col-md-offset-4 col-md-4">
-        <button type="button" class="btn btn-danger btn-block" onclick="deleteSelectedRows()">Supprimer</button>
-        <button type="button" class="btn btn-success btn-block" onclick="validateDeposit()">Confirmer</button>
+        <button type="button" class="btn btn-danger btn-block" onclick="deleteSelectedRows()">Delete</button>
+        <button type="button" class="btn btn-success btn-block" onclick="validateDeposit()">Confirm</button>
     </div>
 </div>
 
@@ -94,10 +94,10 @@
 
 <div class="row">
     <div hidden id="alertSuccess" class="alert alert-success alert-dismissible text-center" role="alert">
-        Dépôt effectué avec succès !
+        Deposit created successfully !
     </div>
     <div hidden id="alertError" class="alert alert-danger text-center" role="alert">
-        Dépôt refusé...
+        Deposit refused...
     </div>
     <div hidden id="alertWarning" class="alert alert-warning text-center" role="alert">
     </div>
@@ -136,7 +136,7 @@
             });
 
             if(tbody===''){
-                tbody += '<tr class="text-center"><td colspan=\"4\">Aucun utilisateur correspondant au critère !</td></tr>';
+                tbody += '<tr class="text-center"><td colspan=\"4\">No user fit the criteria !</td></tr>';
             }
 
             $('#bodyUsersTable').html(tbody);
@@ -155,11 +155,11 @@
             userIdSelected = $('.danger #userId').text();
 
             if(userSelected === ""){
-                $('#alertError').text('Veuillez choisir un ménage');
+                $('#alertError').text('Please choose a household');
                 $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             }
             else if(isWasteTableEmpty()){
-                $('#alertError').text('Aucun déchet encodé');
+                $('#alertError').text('No waste encoded');
                 $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             }
             else{
@@ -202,7 +202,7 @@
             wasteVolume = $("#inputWasteVolume").val();
 
             if(wasteType === "" ||wasteVolume === ""){
-                $('#alertError').text('Veuillez entrer toute les informations nécessaires !');
+                $('#alertError').text('Please enter all the informations required !');
                 $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             }
             else{
@@ -223,7 +223,7 @@
                 if(!updated){
                     newLine = "<tr class=\"text-center\"> \
                             <td id=\"wasteType\">" + wasteType + "</td> \
-                            <td id=\"wasteVolume\"><span id='" + wasteType + " volume'>" + wasteVolume + "</span>m3</td> \
+                            <td id=\"wasteVolume\"><span id='" + wasteType + " volume'>" + wasteVolume + "</span>m³</td> \
                             <td><input type=\"checkbox\"></td> \
                         </tr>";
                     tbody = $('#bodyWasteTable').append(newLine);

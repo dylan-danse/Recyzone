@@ -73,8 +73,8 @@ class DefaultController extends Controller
         $BOIS = new WasteType('bois',3);
         $BRIQUE = new WasteType('briques et briquaillons',2.5);
         $TERRE = new WasteType('terres et sables',2.5);
-        $METAUX = new WasteType('métaux',null);
-        $PAPIER = new WasteType('papiers et cartons',null);
+        $METAUX = new WasteType('métaux',0);
+        $PAPIER = new WasteType('papiers et cartons',0  );
 
         $CONTAINER1 = new Container('50',0,$JARDIN,$PARK1);
         $CONTAINER2 = new Container('40',0,$JARDIN,$PARK1);

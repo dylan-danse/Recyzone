@@ -128,7 +128,7 @@ class EmployeController extends Controller
                     new Range(
                         [
                             'min' => 1,
-                            'minMessage' => "Le nombre d'adulte ne peut pas être moins de {{ limit }}"
+                            'minMessage' => "The number of adult cannot be less than {{ limit }}"
                         ]
                     )
                 ],
@@ -139,7 +139,7 @@ class EmployeController extends Controller
                         new Range(
                             [
                                 'min' => 0,
-                                'minMessage' => "Le nombre d'enfants ne peut pas être moins de {{ limit }}"
+                                'minMessage' => "The number of children cannot be less than {{ limit }}"
                             ]
                         )
                     ],
@@ -276,7 +276,7 @@ class EmployeController extends Controller
             try{
                 $container = $query->getQuery()->getSingleResult();
             } catch (\Exception $ex){
-                return new Response("Dépôt impossible pour ".$volume."m3 (".$item['type'].") ! Aucun conteneur ne possède la capacité suffisante", 500);
+                return new Response("Deposit impossible for ".$volume."m³ (".$item['type'].") ! No container has enough capacity available", 500);
             }
 
             $deposit = new Deposit($volume,new \DateTime("now"),$wasteType,$houseHold,$container,null);
@@ -284,11 +284,11 @@ class EmployeController extends Controller
 
             $container->setUsedVolume($container->getUsedVolume()+$volume);
             if($container->getCompletionPercentage() >= 80){
-                $em->persist(new Notification(new \DateTime("now"),"Conteneur".$container->getId()." rempli à ".$container->getCompletionPercentage()."%", false,$this->getUser()->getPark()));
+                $em->persist(new Notification(new \DateTime("now"),"Container".$container->getId()." filled at ".$container->getCompletionPercentage()."%", false,$this->getUser()->getPark()));
             }
             $em->flush();
         }
-        return new JsonResponse("Dépôts effectué avec succès !", 200);
+        return new JsonResponse("Deposits created successfully !", 200);
     }
 
 
@@ -304,7 +304,7 @@ class EmployeController extends Controller
     function checkIfDepositIsAuthorized($userId, $total){
         //check quota journalier
         if($total>4){
-            return "Dépôts refusé ! Vous ne pouvez pas déposer plus de 4 m3 par jour";
+            return "Deposit refused ! You cannot not depose more than 4m³ a day";
         }
 
         $em = $this->getDoctrine()->getManager();

@@ -121,11 +121,14 @@ class GerantController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository("AppBundle:User")->find($userId);
+
+        $oldRole = $user->getRole()->getName();
+
         $role = $em->getRepository("AppBundle:Role")->find($roleId);
         $user->setRole($role);
         $em->flush();
 
-        return new JsonResponse("Rôle de ".$user->getFirstName()." ".$user->getLastName()." mis à jour avec succès (".$role->getName().")", 200);
+        return new JsonResponse($user->getFirstName()." ".$user->getLastName()." role updated successfully (".$oldRole." -> ".$role->getName().")", 200);
     }
 
     /**

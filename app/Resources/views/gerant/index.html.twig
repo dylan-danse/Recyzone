@@ -10,7 +10,7 @@
     <tr>
         <th class="text-center">Date</th>
         <th class="text-center">Notification</th>
-        <th class="text-center">Clôturer</th>
+        <th class="text-center">Close</th>
     </tr>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@
         {% endfor %}
     {% else %}
         <tr>
-            <td colspan="3">Aucune notifications</td>
+            <td colspan="3">No notifications</td>
         </tr>
     {% endif %}
     </tbody>
@@ -62,7 +62,6 @@
             data: {id: JSON.stringify(param)},
         }).done(function(msg){
             rows.remove();
-            console.log(msg);
         });
     }
 </script>
