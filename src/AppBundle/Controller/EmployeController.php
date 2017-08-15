@@ -49,6 +49,29 @@ class EmployeController extends Controller
         ));
     }
 
+
+    /**
+     * @Route("/depositsHistory", name="depositsHistory")
+     */
+    public function depositHistory(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $result =
+            $em->createQuery("
+                SELECT d 
+                FROM AppBundle:Deposit d
+                LEFT JOIN d.household h 
+                LEFT JOIN d.waste_type w
+                WHERE h.id = :billId"
+            )->setParameter('billId', $this->getUser()->getId())
+                ->getResult();
+
+        return $this->render('menage/deposits.html.twig',array(
+            'deposits' => $result
+        ));
+    }
+
+
     /**
      * @Route("/addHousehold", name="addHousehold")
      */

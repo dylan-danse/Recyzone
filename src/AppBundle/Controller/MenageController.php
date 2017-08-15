@@ -57,6 +57,28 @@ class MenageController extends Controller
     }
 
     /**
+     * @Route("/depositsHistory", name="depositsHistory")
+     */
+    public function depositHistory(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $result =
+            $em->createQuery("
+                SELECT d 
+                FROM AppBundle:Deposit d                
+                LEFT JOIN d.waste_type w
+                LEFT JOIN d.container c 
+                LEFT JOIN c.park p 
+                WHERE p.id = :parkId"
+            )->setParameter('parkId', $this->getUser()->getPark()->getId())
+                ->getResult();
+
+        return $this->render('menage/deposits.html.twig',array(
+            'deposits' => $result
+        ));
+    }
+
+    /**
      * @Route("/billdetails/{id}", name="billdetails")
      */
     public function getBillDetails($id){
