@@ -9,12 +9,12 @@
 <table id="billTable" class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>Numéro</th>
-            <th>Date de création</th>
-            <th>Montant</th>
-            <th>Statut</th>
-            <th>Echéance</th>
-            <th>Détails</th>
+            <th>Number</th>
+            <th>Creation Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Deadline</th>
+            <th>Details</th>
         </tr>
     </thead>
     <tbody>
@@ -31,7 +31,7 @@
             {% endif %}
             <td>
                 <i class="fa fa-th-list" aria-hidden="true" role="button" onclick="seeDetails({{ bill|json_encode() }})"
-                   data-toggle="tooltip" data-placement="right" title="Voir détails facture n°{{ bill.id }}"> </i>
+                   data-toggle="tooltip" data-placement="right" title="See bill details n°{{ bill.id }}"> </i>
             </td>
         </tr>
     {% endfor %}
@@ -53,7 +53,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <div class="modal-title">Détails facture n°<span id="id"></span> du <span id="creationDate"></span></h4>
+                <div class="modal-title">Details bill n°<span id="id"></span> du <span id="creationDate"></span></h4>
             </div>
             <div class="modal-body">
                 <p>Statut : <span id="status"></span></p>
@@ -61,18 +61,12 @@
                     <thead>
                     <tr>
                         <th class="text-center">Type</th>
-                        <th class="text-center">Type déchet</th>
-                        <th class="text-center">Quantité</th>
-                        <th class="text-center">Montant</th>
+                        <th class="text-center">Waste Type</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-center">Amount</th>
                     </tr>
                     </thead>
                     <tbody id="bodyDepositsTable">
-                    <tr>
-                        <td>aaa</td>
-                        <td>zzz</td>
-                        <td>eee</td>
-                        <td>rrr</td>
-                    </tr>
                     </tbody>
                     <tfoot>
                         <tr>
@@ -117,6 +111,7 @@
             $.each(JSON.parse(msg['data']), function(i, item){
                 var quantity = 0;
                 var wasteType = '';
+                console.log(item);
 
                 $.each(item.deposits,function(j,deposit){
                     quantity += deposit.quantity;
@@ -139,7 +134,7 @@
                     </tr>";
 
                 if(tbody===''){
-                    tbody += '<tr class="text-center"><td colspan="4">Aucun détails pour cette facture !</td></tr>';
+                    tbody += '<tr class="text-center"><td colspan="4">No details for this bill !</td></tr>';
                 }
             });
             $('#bodyDepositsTable').html(tbody);

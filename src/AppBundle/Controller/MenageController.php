@@ -65,12 +65,11 @@ class MenageController extends Controller
         $result =
             $em->createQuery("
                 SELECT d 
-                FROM AppBundle:Deposit d                
+                FROM AppBundle:Deposit d
+                LEFT JOIN d.household h 
                 LEFT JOIN d.waste_type w
-                LEFT JOIN d.container c 
-                LEFT JOIN c.park p 
-                WHERE p.id = :parkId"
-            )->setParameter('parkId', $this->getUser()->getPark()->getId())
+                WHERE h.id = :billId"
+            )->setParameter('billId', $this->getUser()->getId())
                 ->getResult();
 
         return $this->render('menage/deposits.html.twig',array(

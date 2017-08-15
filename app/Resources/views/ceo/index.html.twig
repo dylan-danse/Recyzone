@@ -5,6 +5,7 @@
 
     <br>
     <br>
+<div class="row">
 
     <table id="containerTable" class="table table-striped table-hover text-center">
         <thead>
@@ -41,10 +42,19 @@
         </tr>
         </tfoot>
     </table>
-
-    <br>
     <br>
     <button onclick="generateBill()" class="btn btn-block btn-primary pull-right">Generate bills</button>
+</div>
+    <br>
+    <br>
+    <div class="row">
+        <div hidden id="alertSuccess" class="alert alert-success alert-dismissible text-center" role="alert">
+        </div>
+        <div hidden id="alertError" class="alert alert-danger text-center" role="alert">
+        </div>
+        <div hidden id="alertWarning" class="alert alert-warning text-center" role="alert">
+        </div>
+    </div>
 
     <div id="modalBill" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -54,7 +64,7 @@
                     <h4 class="modal-title">Recyzone - Billing</h4>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center">x bills generated -  total : y &euro;</p>
+                    <p class="text-center"><span id="spanNbBillsGenerated"></span> bill(s) generated -  total : <span id="spanSumBillsGenerated"></span> &euro;</p>
                     <hr>
                     <table class="table table-striped table-hover text-center">
                         <thead>
@@ -64,12 +74,7 @@
                                 <th class="text-center">Amount</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>aaa</td>
-                                <td>zzz</td>
-                                <td>eee</td>
-                            </tr>
+                        <tbody id="modalBillBody">
                         </tbody>
                     </table>
                 </div>
@@ -93,7 +98,7 @@
 
         function generateTournee(){
             $.ajax({
-                url: "/generateTournee",
+                url: "./generateTournee",
                 method: "get"
             }).done(function(msg){
                 console.log(msg);
@@ -101,33 +106,42 @@
         }
 
         function generateBill(){
+            $('#alertWarning').text("Loading...");
+            $('#alertWarning').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             $.ajax({
-                url: "/generateBills",
+                url: "./generateBills",
                 method: "get"
             }).done(function(msg){
                 updateModalBillsInfos(msg);
                 $('#modalBill').modal('show');
+            }).fail(function(xhr, status, error) {
+                $('#alertError').text(xhr.responseText);
+                $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             });
         }
 
         function updateModalBillsInfos(msg){
-            /*var tbody = '';*/
+            var tbody = '';
+            var counter = 0;
+            var sum = 0;
+
             $.each(JSON.parse(msg['data']), function(i, item){
-                /*tbody +=  "<tr role='button' onclick='setSelectedUser(this)' class='text-center'> \
-                            <td>" + item.firstName + " " + item.lastName +" </td> \
-                            <td>" + item.houseNumber + " " + item.streetName + " - " + "code" + " " + item.city + "</td> \
-                            <td>" + item.email + "</td> \
-                            <td id='columnUsername'>" + item.username + "</td> \
-                            <td id='userId' hidden>" + item.id + "</td>\
-                        </tr>";*/
-                console.log(item);
+                tbody +=  "<tr class='text-center'> \
+                            <td>" + item.household.commune + "</td> \
+                            <td>" + item.household.firstName + " " + item.household.lastName +" </td> \
+                            <td>" + item.amount + "€</td> \
+                        </tr>";
+                counter++;
+                sum += item.amount;
             });
-/*
+
             if(tbody===''){
-                tbody += '<tr class="text-center"><td colspan=\"4\">Aucun utilisateur correspondant au critère !</td></tr>';
+                tbody += '<tr class="text-center"><td colspan=\"4\">No bills generated !</td></tr>';
             }
 
-            $('#bodyUsersTable').html(tbody);*/
+            $('#modalBillBody').html(tbody);
+            $("#spanNbBillsGenerated").text(counter);
+            $("#spanSumBillsGenerated").text(sum);
 
         }
     </script>

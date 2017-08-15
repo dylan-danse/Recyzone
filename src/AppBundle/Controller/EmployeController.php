@@ -59,11 +59,12 @@ class EmployeController extends Controller
         $result =
             $em->createQuery("
                 SELECT d 
-                FROM AppBundle:Deposit d
-                LEFT JOIN d.household h 
+                FROM AppBundle:Deposit d                
                 LEFT JOIN d.waste_type w
-                WHERE h.id = :billId"
-            )->setParameter('billId', $this->getUser()->getId())
+                LEFT JOIN d.container c 
+                LEFT JOIN c.park p 
+                WHERE p.id = :parkId"
+            )->setParameter('parkId', $this->getUser()->getPark()->getId())
                 ->getResult();
 
         return $this->render('menage/deposits.html.twig',array(
@@ -326,7 +327,7 @@ class EmployeController extends Controller
             );
         $result = $query->getQuery()->getResult();
         if(count($result) > 0){
-            return "Dépôts refusé ! Vous avez déja effectué un dépôt aujourd'hui";
+            return "Deposit refused ! You cannot make more than one deposit per day";
         }
 
         //check quota hebdomadaire
@@ -348,7 +349,7 @@ class EmployeController extends Controller
         $alreadyUsed = intval($result['total']);
 
         if($alreadyUsed + $total > 15){
-            return "Dépôts refusé ! Vous ne pouvez pas déposer plus de 15 m3 par semaine (".$alreadyUsed." m3 déja utilisé)";
+            return "Deposit refused ! You cannot make a deposit of more that 15 m3 per week (".$alreadyUsed." m3 already used this week)";
         }
     }
 

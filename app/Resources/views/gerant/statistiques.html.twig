@@ -2,8 +2,6 @@
 
 {% block body %}
 
-<h1 class="text-center">Statistiques</h1>
-
 <br>
 <br>
 
@@ -83,7 +81,7 @@
             var visiteOrVolume = $('#selectVisiteOrVolume').find(":selected").val();
             var period = $('#selectPeriod').find(":selected").val();
             var wasteType = $('#selectWasteType').find(":selected").val();
-            var url = "/statistiques/" + period + "/" + visiteOrVolume + "/" + wasteType + ""
+            var url = "./statistiques/" + period + "/" + visiteOrVolume + "/" + wasteType + ""
             $('#alertWarning').text('Wait...');
             $('#alertWarning').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             $.ajax({
@@ -98,50 +96,6 @@
                 $('#alertError').slideUp(300).fadeIn(400).delay(2500).fadeOut();
             });
         }
-
-        function sqlToFrench($day){
-            switch ($day){
-                case 'Monday':
-                    return 'Lundi';
-                case 'Tuesday':
-                    return 'Mardi';
-                case 'Wednesday':
-                    return 'Mercredi';
-                case 'Thursday':
-                    return 'Jeudi';
-                case 'Friday':
-                    return 'Vendredi';
-                case 'Saturday':
-                    return 'Samedi';
-                case 'Sunday':
-                    return 'Dimanche';
-                case 'January':
-                    return 'Janvier';
-                case 'February':
-                    return 'Février';
-                case 'March':
-                    return 'Mars';
-                case 'April':
-                    return 'Avril';
-                case 'May':
-                    return 'Mai';
-                case 'June':
-                    return 'Juin';
-                case 'July':
-                    return 'Juillet';
-                case 'August':
-                    return 'Août';
-                case 'September':
-                    return 'Septembre';
-                case 'October':
-                    return 'Octobre';
-                case 'November':
-                    return 'Novembre';
-                case 'December':
-                    return 'Décembre';
-            }
-        }
-
 
         function refreshStatTable(msg){
             var tbody = '';

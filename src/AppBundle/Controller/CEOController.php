@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\BillDetails;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CEOController extends Controller
 {
@@ -70,6 +71,9 @@ class CEOController extends Controller
         $userId = '';
         $sameUser = false;
 
+        if(count($results) == 0){
+            return new Response("Nothing to be generated...",500);
+        }
 
         foreach ($results as $detail){
             if($userId != '' && $userId == $detail['userId']){
@@ -142,7 +146,7 @@ class CEOController extends Controller
             }
         }
 
-        return new Response(array('data' => json_encode($responseBills)),200);
+        return new JsonResponse(array('data' => json_encode($responseBills)),200);
     }
 
     public function calculateForfait($wasteType, $exceed){
