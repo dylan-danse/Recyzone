@@ -176,12 +176,17 @@ class EmployeController extends Controller
             $numberOfAdult = $form['numberOfAdult']->getData();
             $numberOfChild = $form['numberOfChild']->getData();
 
+            $password = 'random';
+
+            //This line is commented because if the password is generated randomly, it is not possible yet to get it in clear (not crypted)
+            //The default password will be 'random', if real random password needed, uncomment the following
+            //$password = $this->generateRandomPassword(8);
+
             $userManager = $this->container->get('fos_user.user_manager');
-            $userAdmin = new User('random',$email,$username,
+            $userAdmin = new User($password,$email,$username,
                 $firstname,$lastName,$streetName,$houseNumber,$houseBox,$commune,$city,$postCode,$numberOfChild,$numberOfAdult,
                 $this->getDoctrine()->getRepository("AppBundle:Role")->findOneByName(array("Ménage")),
                 $this->getUser()->getPark());
-            // TODO : replace with random password generation
 
             $userManager->updateUser($userAdmin);
             $this->createQuotasFor($userAdmin);
@@ -202,6 +207,10 @@ class EmployeController extends Controller
     public function makeDeposit(Request $request)
     {
         $this->redirectIfNotEmploye();
+
+        // This line is commented because the exam will take place during a day where the park is closed.
+        // Uncomment to applay real schedule
+        //$this->redirectIfParkClosed();
 
         $userManager = $this->container->get('fos_user.user_manager');
         $users = $userManager->findUsers();
@@ -413,5 +422,15 @@ class EmployeController extends Controller
         $url = preg_replace('#Ý#', 'Y', $url);
 
         return ($url);
+    }
+
+    function generateRandomPassword($size){
+        $seed = str_split('abcdefghijklmnopqrstuvwxyz'
+            .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            .'0123456789!@#$%^&*()');
+        shuffle($seed);
+        $rand = '';
+        foreach (array_rand($seed, $size) as $k) $rand .= $seed[$k];
+        return $rand;
     }
 }

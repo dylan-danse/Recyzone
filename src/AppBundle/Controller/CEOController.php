@@ -71,7 +71,7 @@ class CEOController extends Controller
         $userId = '';
         $sameUser = false;
 
-        if(count($results) == 0){
+        if(!$results && count($results) == 0){
             return new Response("Nothing to be generated...",500);
         }
 
@@ -88,7 +88,7 @@ class CEOController extends Controller
                 left join fos_user f on f.id = d.household_id
                 left join quota q on q.user_id = f.id
                 where f.id = ".$userId." AND d.waste_type_id = ".$detail['wasteTypeId']."  AND q.waste_type_id = ".$detail['wasteTypeId']." AND YEAR(d.creation_date)=YEAR(CURDATE())
-                group by d.id
+                group by total,quota
             ";
 
             $stmt = $em->getConnection()->prepare($sql);
@@ -149,7 +149,7 @@ class CEOController extends Controller
         return new JsonResponse(array('data' => json_encode($responseBills)),200);
     }
 
-    public function calculateForfait($wasteType, $exceed){
+    function calculateForfait($wasteType, $exceed){
         switch ($wasteType->getName()){
             case "déchets de jardin":
             case "bois":
@@ -164,7 +164,7 @@ class CEOController extends Controller
         }
     }
 
-    public function calculateVariable($wasteType, $exceed){
+    function calculateVariable($wasteType, $exceed){
         switch ($wasteType->getName()){
             case "déchets de jardin":
                 return ($exceed <= 20) ? 2.5 : 4 ;
