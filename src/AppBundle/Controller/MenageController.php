@@ -23,7 +23,7 @@ class MenageController extends Controller
         $sql = " 
             SELECT w.name as type, 
                     (SELECT volume FROM quota where waste_type_id = w.id AND user_id = ".$id.") as total,
-                    (SELECT SUM(quantity) FROM deposit where waste_type_id = w.id AND user_id = ".$id.") as deposed
+                    (SELECT SUM(quantity) FROM deposit where waste_type_id = w.id AND household_id = ".$id.") as deposed
             FROM waste_type w
             left JOIN deposit d on w.id = d.waste_type_id
             left join fos_user u on u.id = d.household_id
