@@ -42,7 +42,7 @@ class BillDetails implements \JsonSerializable
      */
     private $bill;
 
-    /** @ORM\OneToMany(targetEntity="Deposit", mappedBy="billDetails") */
+    /** @ORM\OneToMany(targetEntity="Deposit", mappedBy="billDetails", fetch="EAGER") */
     private $deposits;
 
     /**
@@ -65,6 +65,22 @@ class BillDetails implements \JsonSerializable
     public function getBill()
     {
         return $this->bill;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeposits()
+    {
+        return $this->deposits;
+    }
+
+    /**
+     * @param mixed $deposits
+     */
+    public function setDeposits($deposits)
+    {
+        $this->deposits = $deposits;
     }
 
     /**

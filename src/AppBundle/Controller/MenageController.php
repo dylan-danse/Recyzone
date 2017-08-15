@@ -67,6 +67,22 @@ class MenageController extends Controller
                 JOIN bd.bill b WHERE b.id = :billId"
                 )->setParameter('billId', $id)
                     ->getResult();
+
+
+        foreach ($result as $detail){
+
+            $qb = $em->createQueryBuilder();
+            $qb->select('d')
+                ->from('AppBundle:Deposit', 'd')
+                ->leftJoin('d.billDetails','b')
+                ->where('b.id = '.$detail->getId());
+            $new = $qb->getQuery()->getResult();
+            foreach($new as $deposit){
+                $deposit->setBillDetails(null);
+            }
+            $detail->setDeposits($new);
+        }
+
         return new JsonResponse(array('data'=>json_encode($result)));
     }
 

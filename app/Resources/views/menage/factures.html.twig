@@ -36,6 +36,16 @@
     </tbody>
 </table>
 
+<div class="row">
+    <div hidden id="alertSuccess" class="alert alert-success alert-dismissible text-center" role="alert">
+    </div>
+    <div hidden id="alertError" class="alert alert-danger text-center" role="alert">
+    </div>
+    <div hidden id="alertWarning" class="alert alert-warning text-center" role="alert">
+    </div>
+</div>
+
+
 <div id="modalDetails" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -86,26 +96,38 @@
         $('#status').text(bill['status']);
         $('#amount').text(bill['amount']);
 
+        $('#alertWarning').text('Wait...');
+        $('#alertWarning').slideUp(300).fadeIn(400).delay(2500).fadeOut();
 
         $.ajax({
             url: "./billdetails/"+bill.id,
             method: "get",
         }).done(function(msg){
+
             var tbody = '';
+
             $.each(JSON.parse(msg['data']), function(i, item){
+                var quantity = 0;
+                var wasteType = '';
+
+                $.each(item.deposits,function(j,deposit){
+                    quantity += deposit.quantity;
+                    console.log(deposit);
+                    wasteType = deposit.waste_type.name;
+                });
 
                 tbody +=  "<tr class='text-center'> \
                         <td>Variable</td> \
-                        <td></td> \
-                        <td></td> \
-                        <td>" + item.variable + "</td> \
+                        <td>" + wasteType + "</td> \
+                        <td> - </td> \
+                        <td>" + item.variable + " &euro;</td> \
                     </tr>";
 
                 tbody +=  "<tr class='text-center'> \
                         <td>Forfait</td> \
-                        <td></td> \
-                        <td></td> \
-                        <td>" + item.forfait + "</td> \
+                        <td>" + wasteType + "</td> \
+                        <td>" + quantity +  "m&sup3;</td> \
+                        <td>" + item.forfait + " &euro;</td> \
                     </tr>";
 
                 if(tbody===''){

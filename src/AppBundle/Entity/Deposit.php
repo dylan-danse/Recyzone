@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="deposit")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\DepositRepository")
  */
-class Deposit
+class Deposit implements \JsonSerializable
 {
     /**
      * @var int
@@ -37,7 +37,7 @@ class Deposit
 
     /**
      * Many deposit have One waste type.
-     * @ORM\ManyToOne(targetEntity="WasteType")
+     * @ORM\ManyToOne(targetEntity="WasteType", fetch="EAGER")
      * @ORM\JoinColumn(name="waste_type_id", referencedColumnName="id")
      */
     private $waste_type;
@@ -202,6 +202,19 @@ class Deposit
     public function getCreationDate()
     {
         return $this->creationDate;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+        return $vars;
     }
 }
 
