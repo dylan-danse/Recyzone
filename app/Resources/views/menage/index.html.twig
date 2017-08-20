@@ -3,12 +3,12 @@
 {% block body %}
 
     <div class="row">
-        <h1>Vos données</h1>
+        <h1>Your informations</h1>
         <br>
         <p>{{ user.lastName }} {{ user.firstName }} ({{ user.email }})</p>
         <p>{{ user.houseNumber }} {{ user.streetName }} - {{ user.postCode }} {{ user.city }}</p>
-        <p>Composition de ménage : {{ user.numberOfAdult }} adultes - {{ user.numberOfChild }} enfants</p>
-        <p>Coefficient de correction : {{ user.correctionCoeff }}%</p>
+        <p>Household composition: {{ user.numberOfAdult }} adults - {{ user.numberOfChild }} children</p>
+        <p>Correction factor: {{ user.correctionCoeff }}%</p>
     </div>
 
     <br>
@@ -16,15 +16,15 @@
     <br>
 
     <div class="row">
-        <h1>Vos quotas actuels</h1>
+        <h1>Your current quotas</h1>
         <br>
         <table class="table table-striped table-hover">
             <thead>
             <tr>
-                <th>Type de déchet</th>
-                <th class="text-center">Volume déposé</th>
-                <th class="text-center">Volume autorisé</th>
-                <th class="text-center">Reste</th>
+                <th>Waste type</th>
+                <th class="text-center">Volume deposed</th>
+                <th class="text-center">Volume authorized</th>
+                <th class="text-center">Remaining Volume</th>
             </tr>
             </thead>
             <tbody>
@@ -32,9 +32,9 @@
                 <tr>
                     <td>{{ quota['type'] }}</td>
                     {% if quota['deposed'] == null %}
-                        <td class="text-center">0 m3</td>
+                        <td class="text-center">0 m³</td>
                     {% else %}
-                        <td class="text-center">{{ quota['deposed'] }} m3</td>
+                        <td class="text-center">{{ quota['deposed'] }} m³</td>
                     {% endif %}
 
                     {% if quota['total'] == 0 %}
@@ -42,7 +42,7 @@
                         <td class="text-center">/</td>
                     {% else %}
                         <td class="text-center">{{ quota['total'] }} m3</td>
-                        <td class="text-center">{% set remaining = quota['total'] - quota['deposed'] %}{{ remaining }} m3</td>
+                        <td class="text-center">{% set remaining = quota['total'] - quota['deposed'] %}{{ remaining }} m³</td>
                     {% endif %}
                 </tr>
             {% endfor %}

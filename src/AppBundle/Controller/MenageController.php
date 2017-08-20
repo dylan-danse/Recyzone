@@ -15,7 +15,9 @@ class MenageController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->redirectIfNotHousehold();
+        $mustRedirect = $this->redirectIfNotHousehold();
+        if($mustRedirect) return $mustRedirect;
+
         $id = $this->getUser()->getId();
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository("AppBundle:User")->find($id);
@@ -47,6 +49,9 @@ class MenageController extends Controller
      */
     public function factureAction(Request $request)
     {
+        $mustRedirect = $this->redirectIfNotHousehold();
+        if($mustRedirect) return $mustRedirect;
+
         $em = $this->getDoctrine()->getManager();
         $bills = $em->getRepository("AppBundle:Bill")->findBy(array("household" => $this->getUser()->getId()));
 
@@ -61,6 +66,9 @@ class MenageController extends Controller
      */
     public function depositHistory(Request $request)
     {
+        $mustRedirect = $this->redirectIfNotHousehold();
+        if($mustRedirect) return $mustRedirect;
+
         $em = $this->getDoctrine()->getManager();
         $result =
             $em->createQuery("
@@ -81,6 +89,9 @@ class MenageController extends Controller
      * @Route("/billdetails/{id}", name="billdetails")
      */
     public function getBillDetails($id){
+        $mustRedirect = $this->redirectIfNotHousehold();
+        if($mustRedirect) return new Response("Unauthorized",400);
+
         $em = $this->getDoctrine()->getManager();
         $result =
                 $em->createQuery("
@@ -106,6 +117,8 @@ class MenageController extends Controller
 
         return new JsonResponse(array('data'=>json_encode($result)));
     }
+
+
 
     public function redirectIfNotHousehold(){
         if ($this->getUser() == null){

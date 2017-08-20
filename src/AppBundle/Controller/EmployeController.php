@@ -35,7 +35,8 @@ class EmployeController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->redirectIfNotEmploye();
+        $mustRedirect = $this->redirectIfNotEmploye();
+        if($mustRedirect) return $mustRedirect;
 
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery("select n from AppBundle\Entity\Notification n inner join n.park as p where p.id = :parkID and n.isDeleted=0");
@@ -49,12 +50,14 @@ class EmployeController extends Controller
         ));
     }
 
-
     /**
      * @Route("/depositsHistory", name="depositsHistory")
      */
     public function depositHistory(Request $request)
     {
+        $mustRedirect = $this->redirectIfNotEmployeOrManager();
+        if($mustRedirect) return $mustRedirect;
+
         $em = $this->getDoctrine()->getManager();
         $result =
             $em->createQuery("
@@ -72,13 +75,13 @@ class EmployeController extends Controller
         ));
     }
 
-
     /**
      * @Route("/addHousehold", name="addHousehold")
      */
     public function addHousehold(Request $request)
     {
-        $this->redirectIfNotEmploye();
+        $mustRedirect = $this->redirectIfNotEmployeOrManager();
+        if($mustRedirect) return $mustRedirect;
 
         $em = $this->getDoctrine()->getManager();
         $communes = $em->getRepository("AppBundle:Commune")->findAll();
@@ -206,11 +209,14 @@ class EmployeController extends Controller
      */
     public function makeDeposit(Request $request)
     {
-        $this->redirectIfNotEmploye();
+        $mustRedirect = $this->redirectIfNotEmployeOrManager();
+        if($mustRedirect) return $mustRedirect;
 
-        // This line is commented because the exam will take place during a day where the park is closed.
+        // These lines are commented because the exam will take place during a day where the park is closed.
         // Uncomment to applay real schedule
-        //$this->redirectIfParkClosed();
+        //
+        //$mustRedirect = $this->redirectIfParkClosed();
+        //if($mustRedirect) return $mustRedirect;
 
         $userManager = $this->container->get('fos_user.user_manager');
         $users = $userManager->findUsers();
@@ -227,6 +233,9 @@ class EmployeController extends Controller
      */
     public function refreshUsersList(Request $request)
     {
+        $mustRedirect = $this->redirectIfNotEmployeOrManager();
+        if($mustRedirect) return new Response("Unauthorized", 400);
+
         if($request->isXmlHttpRequest())
         {
             $param = $request->get("id");
@@ -250,6 +259,15 @@ class EmployeController extends Controller
      */
     public function addWastes(Request $request, $userId)
     {
+        $mustRedirect = $this->redirectIfNotEmployeOrManager();
+        if($mustRedirect) return new Response("Unauthorized", 400);
+
+        // These lines are commented because the exam will take place during a day where the park is closed.
+        // Uncomment to applay real schedule
+        //
+        //$mustRedirect = $this->redirectIfParkClosed();
+        //if($mustRedirect) return $mustRedirect;
+
         $temp = json_decode($request->getContent(), true);
         $total=0;
         foreach($temp as $item) {
@@ -367,6 +385,15 @@ class EmployeController extends Controller
             return $this->redirect('./login');
         }
         elseif ($this->getUser()->getRole()->getName() != 'Employé'){
+            return $this->redirect('./error');
+        }
+    }
+
+    function redirectIfNotEmployeOrManager(){
+        if ($this->getUser() == null){
+            return $this->redirect('./login');
+        }
+        elseif ($this->getUser()->getRole()->getName() != 'Employé' && $this->getUser()->getRole()->getName() != 'Gérant'){
             return $this->redirect('./error');
         }
     }

@@ -17,7 +17,9 @@ class CEOController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->redirectIfNotCEO();
+        $mustRedirect = $this->redirectIfNotCEO();
+        if($mustRedirect) return $mustRedirect;
+
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQueryBuilder();
 
@@ -39,7 +41,9 @@ class CEOController extends Controller
      */
     public function emptyContainers(Request $request){
         //not compulsory, so for now clean all container instead of only the selected ones
-        $this->redirectIfNotCEO();
+        $mustRedirect = $this->redirectIfNotCEO();
+        if($mustRedirect) return new Response("Unauthorized)",400);
+
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $query = $qb->update('AppBundle:Container', 'c')
@@ -53,6 +57,9 @@ class CEOController extends Controller
      * @Route("/generateBills", name="generateBills")
      */
     public function generateBills(Request $request){
+
+        $mustRedirect = $this->redirectIfNotCEO();
+        if($mustRedirect) return new Response("Unauthorized)",400);
 
         $responseBills = [];
         $em = $this->getDoctrine()->getManager();
@@ -148,6 +155,9 @@ class CEOController extends Controller
 
         return new JsonResponse(array('data' => json_encode($responseBills)),200);
     }
+
+
+
 
     function calculateForfait($wasteType, $exceed){
         switch ($wasteType->getName()){

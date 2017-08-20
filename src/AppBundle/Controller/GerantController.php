@@ -17,7 +17,8 @@ class GerantController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->redirectIfNotGerant();
+        $mustRedirect = $this->redirectIfNotGerant();
+        if($mustRedirect) return $mustRedirect;
 
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery("select n from AppBundle\Entity\Notification n inner join n.park as p where p.id = :parkID and n.isDeleted=0");
@@ -36,6 +37,9 @@ class GerantController extends Controller
      */
     public function archiveNotifications(Request $request)
     {
+        $mustRedirect = $this->redirectIfNotGerant();
+        if($mustRedirect) return new JsonResponse("Unauthorized", 400);;
+
         if($request->isXmlHttpRequest())
         {
             $param = $request->get("id");
@@ -59,7 +63,8 @@ class GerantController extends Controller
      */
     public function occupations(Request $request)
     {
-        $this->redirectIfNotGerant();
+        $mustRedirect = $this->redirectIfNotGerant();
+        if($mustRedirect) return $mustRedirect;
 
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery(
@@ -79,7 +84,8 @@ class GerantController extends Controller
      */
     public function statistiques(Request $request)
     {
-        $this->redirectIfNotGerant();
+        $mustRedirect = $this->redirectIfNotGerantOrCEO();
+        if($mustRedirect) return $mustRedirect;
 
         $em = $this->getDoctrine()->getManager();
         $wasteTypes = $em->getRepository('AppBundle:WasteType')->findAll();
@@ -94,7 +100,8 @@ class GerantController extends Controller
      */
     public function manage(Request $request)
     {
-        $this->redirectIfNotGerant();
+        $mustRedirect = $this->redirectIfNotGerantOrCEO();
+        if($mustRedirect) return $mustRedirect;
 
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQueryBuilder();
@@ -119,6 +126,9 @@ class GerantController extends Controller
      */
     public function updateRole($userId, $roleId)
     {
+        $mustRedirect = $this->redirectIfNotGerantOrCEO();
+        if($mustRedirect) return new JsonResponse("Unauthorized", 400);
+
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository("AppBundle:User")->find($userId);
 
@@ -175,6 +185,8 @@ class GerantController extends Controller
         return new JsonResponse(array('data' => json_encode($stats)));
     }
 
+
+
     public function redirectIfNotGerant(){
         if ($this->getUser() == null){
             return $this->redirect('./login');
@@ -183,4 +195,15 @@ class GerantController extends Controller
             return $this->redirect('./error');
         }
     }
+
+    public function redirectIfNotGerantOrCEO(){
+        if ($this->getUser() == null){
+            return $this->redirect('./login');
+        }
+        elseif ($this->getUser()->getRole()->getName() != 'Gérant' && $this->getUser()->getRole()->getName() != 'CEO'){
+            return $this->redirect('./error');
+        }
+    }
+
+
 }
